@@ -5,6 +5,7 @@ import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
+import com.example.bsep.model.SubjectData;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
@@ -13,8 +14,7 @@ import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 
-import rs.ac.uns.ftn.informatika.ib.crypto.primeri.pki.data.IssuerData;
-import rs.ac.uns.ftn.informatika.ib.crypto.primeri.pki.data.SubjectData;
+import com.example.bsep.model.IssuerData;
 
 public class CertificateGenerator {
 	public CertificateGenerator() {}
