@@ -7,7 +7,9 @@ import com.security.pki.model.User;
 import com.security.pki.service.CertificateService;
 import org.bouncycastle.util.encoders.Base64Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,16 +40,26 @@ public class CertificateController {
         return this.certificateService.findAllByUser(id);
     }
 
-    @RequestMapping(value="/downloadCertificate/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/downloadCertificate/{id}")
     public ResponseEntity<?> downloadCertificate(@PathVariable Integer id) throws KeyStoreException, CertificateEncodingException, IOException {
         MyCertificate cert = certificateService.findById(id);
         if(cert.isRevoked()){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Certificate certificate = certificateService.findCertificateBySerialNumber(cert.getSerialNumber(), cert.getCertificateType().toString());
-        certificateService.downloadCert(certificate, cert.getSerialNumber());
+        //certificateService.downloadCert(certificate, cert.getSerialNumber());
+        var headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename =" + cert.getSerialNumber() +".cer");
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        try {
+            var resource = certificate.getEncoded();
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .contentType(MediaType.parseMediaType("application/octet-stream"))
+                    .body(resource);
+        } catch (CertificateEncodingException e) {
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @RequestMapping(value="/findById/{id}", method = RequestMethod.GET)

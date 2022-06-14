@@ -100,13 +100,14 @@ export class CertificateComponent implements OnInit {
   }
 
   downloadCertificate() {
-    // this.http.get('http://localhost:9000/api/certificate/downloadCertificate/' + this.id)
-    this.certificateService.downloadCertificate(this.id)
-    .subscribe(data => { 
+    this.certificateService.downloadCertificate(this.id).subscribe(data => { 
+      let blob = new Blob([data], { type: 'application/octet-stream' })
+      let link = document.createElement('a')
+      link.href = URL.createObjectURL(blob)
+      link.download = this.certificate.serialNumber + ".cer"
+      link.click()
+      URL.revokeObjectURL(link.href)
       alert('Certificate is downloaded')
-    },
-    err => {
-      alert('Certificate is revoked, cannot be downloaded')
     });
   }
 

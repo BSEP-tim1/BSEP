@@ -58,7 +58,7 @@ export class CertificateService {
   } 
 
   downloadCertificate(id: number){
-    return this._http.get(`${this.userPath}/downloadCertificate/` + id);
+    return this._http.get(`${this.userPath}/downloadCertificate/` + id, { responseType: 'blob'});
   }
 
   findAllByUserId(id: number) {

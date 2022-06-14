@@ -51,12 +51,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.headers().xssProtection().and().contentSecurityPolicy("script-src 'self'");
         http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 
                 .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
 
-                .authorizeRequests().antMatchers("**/auth/**").permitAll()
+                .authorizeRequests()
                 .antMatchers("**/search/**").permitAll()
                 .antMatchers("**/h2-console/**").permitAll()
 
