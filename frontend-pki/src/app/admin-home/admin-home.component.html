@@ -1,0 +1,73 @@
+<section>
+    <button style="margin: 10px;" mat-raised-button color="primary" (click)="addAdmin()"> Add new admin </button>
+    <button mat-raised-button color="primary" (click)="changePassword()"> Change password </button>
+    <h1>Root certificates</h1>
+
+    <mat-divider></mat-divider>
+
+    <div class="card-holder row">
+        <mat-card *ngFor="let c of rootCert" class="example-card column" >
+            <mat-card-title style="margin-top: 3%">{{c.commonName}} 
+                <label *ngIf="!c.isValid && !c.revoked" style="color: red; margin-left: 25%; margin-right: 3px;">EXPIRED</label>
+                <label *ngIf="c.revoked" style="color: red; margin-left: 25%; margin-right: 3px;">REVOKED</label></mat-card-title>
+            <mat-card-subtitle>Common name</mat-card-subtitle>
+            <mat-card-content>
+            <p><b>Valid from: </b> {{ c.validFrom }}</p>
+            <p><b>Valid to: </b> {{ c.validTo }}</p>
+            <p><b>Email: </b> {{ c.email }} </p>
+            </mat-card-content>
+            <mat-card-actions>
+            <button style="margin:2%; margin-left: 40%;" mat-button (click)="review(c.id)">Details</button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+
+</section>
+
+<section>
+    <h1>CA certificates</h1>
+
+    <mat-divider></mat-divider>
+
+    <div class="card-holder row">
+        <mat-card *ngFor="let c of caCert" class="example-card column">
+            <mat-card-title style="margin-top: 3%">{{c.commonName}} 
+                <label *ngIf="!c.isValid && !c.revoked" style="color: red; margin-left: 25%; margin-right: 3px;">EXPIRED</label>
+                <label *ngIf="c.revoked" style="color: red; margin-left: 25%; margin-right: 3px;">REVOKED</label></mat-card-title>
+            <mat-card-subtitle>Common name</mat-card-subtitle>
+            <mat-card-content>
+            <p><b>Valid from: </b> {{ c.validFrom }}</p>
+            <p><b>Valid to: </b> {{ c.validTo }}</p>
+            <p><b>Email: </b> {{ c.email }} </p>
+            </mat-card-content>
+            <mat-card-actions>
+            <button style="margin:2%; margin-left: 40%;" mat-button (click)="review(c.id)">Details</button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+
+</section>
+
+<section>
+    <h1>End Entity certificates</h1>
+
+    <mat-divider></mat-divider>
+
+    <div class="card-holder row">
+        <mat-card *ngFor="let c of endEntityCert" class="example-card column">
+            <mat-card-title style="margin-top: 3%">{{c.commonName}} 
+                <label *ngIf="!c.isValid && !c.revoked" style="color: red; margin-left: 25%; margin-right: 3px;">EXPIRED</label>
+                <label *ngIf="c.revoked" style="color: red; margin-left: 25%; margin-right: 3px;">REVOKED</label></mat-card-title>
+            <mat-card-subtitle>Common name</mat-card-subtitle>
+            <mat-card-content>
+            <p><b>Valid from: </b> {{ c.validFrom }}</p>
+            <p><b>Valid to: </b> {{ c.validTo }}</p>
+            <p><b>Email: </b> {{ c.email }} </p>
+            </mat-card-content>
+            <mat-card-actions>
+            <button style="margin:2%; margin-left: 40%;" mat-button (click)="review(c.id)">Details</button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+
+</section>

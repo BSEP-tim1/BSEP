@@ -1,4 +1,4 @@
-package rs.ac.uns.ftn.informatika.ib.crypto.primeri.pki.certificates;
+package com.example.bsep.certificates;
 
 import java.math.BigInteger;
 import java.security.cert.CertificateEncodingException;

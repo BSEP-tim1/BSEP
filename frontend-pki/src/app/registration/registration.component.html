@@ -1,0 +1,26 @@
+<body>
+    <div>
+        <h1 style="display: flex; justify-content: center; margin: auto; margin-top: 30px;">Sign up form</h1>
+        <mat-form-field style="background: white;">
+            <mat-label>Enter your email</mat-label>
+            <input matInput placeholder="name@example.com"  [formControl]="email" required>
+            <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+        
+
+        <mat-form-field style="background: white;" >
+            <mat-label>Enter your password</mat-label>
+            <input matInput placeholder="" [formControl]="password" required type="password">
+            <mat-error *ngIf="password.invalid">{{getPasswordErrorMessage()}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field style="background: white;" style="background-color: white;">
+            <mat-label>Re-enter your password</mat-label>
+            <input matInput placeholder="" [formControl]="password2" required type="password">
+            <mat-error *ngIf="password2.invalid">{{getPassword2ErrorMessage()}}</mat-error>
+        </mat-form-field>
+
+        <button style="display: flex; justify-content: center; margin: auto; margin-top: 20px;"
+         mat-raised-button color="primary" (click)="signUp()">Sign up</button>
+    </div>
+</body> 

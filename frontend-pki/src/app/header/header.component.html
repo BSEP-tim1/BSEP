@@ -1,0 +1,33 @@
+<mat-toolbar class="app-navbar" color="primary">
+    <div class="right">
+        <div fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="flex-end center"> 
+            <button *ngIf="isAdmin()" mat-button mat-ripple routerLink="/admin-home">
+                <span>Home</span>
+            </button> 
+            
+            <button *ngIf="isClient()" mat-button mat-ripple routerLink="/user-home">
+                <span>Home</span>
+            </button> 
+
+            <button *ngIf="isAdmin()" mat-button mat-ripple routerLink="/new-certificate-admin">
+                <span>New Certificate</span>
+            </button> 
+
+            <button *ngIf="isClient()" mat-button mat-ripple routerLink="/new-certificate">
+                <span>New Certificate</span>
+            </button> 
+
+            <button *ngIf="isAdmin() || isClient()" mat-button mat-ripple (click) = "logout()">
+                <span>Logout</span>
+            </button> 
+            
+            <!-- <button *ngIf="hasSignedIn()" [matMenuTriggerFor]="userMenu" class="greeting-hamburger" mat-icon-button
+                mat-ripple>
+                <mat-icon>menu</mat-icon>
+            </button> -->
+            <!-- <mat-menu #userMenu [overlapTrigger]="false" class="app-header-userMenu" yposition="below">
+                <app-user-menu></app-user-menu>
+            </mat-menu> -->
+        </div>
+    </div>
+</mat-toolbar>

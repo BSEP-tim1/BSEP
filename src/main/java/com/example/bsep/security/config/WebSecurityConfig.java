@@ -19,7 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
     //private final UserService clientService;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    //private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -30,20 +30,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .anyRequest()
                 .authenticated().and()
                 .formLogin()
-                .defaultSuccessUrl("http://localhost:4200/home", true);
-                //.loginPage("/login").permitAll();
+                //.defaultSuccessUrl("http://localhost:4200/home", true);
+                .loginPage("/login").permitAll();
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(daoAuthenticationProvider());
-    }
-
-    @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(){
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(bCryptPasswordEncoder);
-        //provider.setUserDetailsService(clientService);
-        return provider;
-    }
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.authenticationProvider(daoAuthenticationProvider());
+//    }
+//
+//    @Bean
+//    public DaoAuthenticationProvider daoAuthenticationProvider(){
+//        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+//        provider.setPasswordEncoder(bCryptPasswordEncoder);
+//        //provider.setUserDetailsService(clientService);
+//        return provider;
+//    }
 }

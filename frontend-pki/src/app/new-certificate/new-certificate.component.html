@@ -1,0 +1,134 @@
+<div class="card-holder row" style="width:50%; margin:1.3% auto;">
+  <div class="container">
+
+  <mat-card  class="example-card column" style="width: 70%;">
+      <mat-card-title style="margin-left: 37%;">New Sertificate</mat-card-title>
+      <br>
+      <mat-card-content>
+      <form style="margin-left: 18%;" #registrationForm = "ngForm" (ngSubmit)="createNewCertificate()" *ngIf="loadedUser">
+
+          <div class="form-group row">
+              <label for="certificateType" style="width: 35%;" class="col-sm-2 col-form-label">Certificate Type:</label>
+              <div class="col-sm-7">
+              <select name="certificateType" id="certificateType" style="width: 100%;" [(ngModel)]="certificate.certificateType">
+              <!-- <option value="0" selected>select type</option> -->
+              <option value="INTERMEDIATE">INTERMEDIATE</option>
+              <option value="END_ENTITY">END_ENTITY</option>
+              </select>
+              </div>
+          </div>
+
+          <div class="form-group row">
+          <label for="subject" style="width: 35%;" class="col-sm-2 col-form-label">Issued to:</label>
+          <div  class="col-sm-7">
+          <select  style="width: 100%;"  [(ngModel)]="certificate.subjectName" name="user" (change)="selectSubject()">
+              <option selected></option>
+              <option *ngFor="let user of users" >{{ user.email }} </option>
+          </select>
+          </div>
+          </div>
+              
+          <!-- SUBJECT INFO -->
+          <div class="form-group row">
+              <label for="commonName" style="width: 35%;" class=" col-form-label">Common name:</label>
+              <div class="col-sm-7">
+                  <input style="width: 100%;" type="text" [(ngModel)]="certificate.certificateDataDTO.commonName" name="commonName" required>
+              </div>
+          </div> 
+
+          <div class="form-group row">
+              <label for="givenName" style="width: 35%;" class=" col-form-label">Given name:</label>
+              <div class="col-sm-7">
+                  <input style="width: 100%;" type="text" [(ngModel)]="certificate.certificateDataDTO.givenName" name="givenName" required>
+              </div>
+          </div> 
+
+          <div class="form-group row">
+              <label for="surname" style="width: 35%;" class=" col-form-label">Surname:</label>
+              <div class="col-sm-7">
+                  <input style="width: 100%;" type="text" [(ngModel)]="certificate.certificateDataDTO.surname" name="surname" required>
+              </div>
+          </div> 
+
+          <div class="form-group row">
+              <label for="organization" style="width: 35%;" class=" col-form-label">Organization:</label>
+              <div class="col-sm-7">
+                  <input style="width: 100%;" type="text" [(ngModel)]="certificate.certificateDataDTO.organization" name="organization" required>
+              </div>
+          </div>
+
+          <div class="form-group row">
+              <label for="organizationalUnit" style="width: 35%;" class=" col-form-label">Organizational Unit:</label>
+              <div class="col-sm-7">
+                  <input style="width: 100%;" type="text" [(ngModel)]="certificate.certificateDataDTO.organizationalUnit" name="organizationalUnit" required>
+              </div>
+          </div> 
+
+          <div class="form-group row">
+              <label for="countryCode" style="width: 35%;" class=" col-form-label">Country code:</label>
+              <div class="col-sm-7">
+                  <input style="width: 100%;" type="text" [(ngModel)]="certificate.certificateDataDTO.countryCode" name="countryCode" required>
+              </div>
+          </div> 
+
+          <div class="form-group row">
+              <label for="countryCode" style="width: 35%;" class=" col-form-label">Email:</label>
+              <div class="col-sm-7">
+                  <label style="width: 100%;"> {{ certificate.subjectName }} </label>
+              </div>
+          </div>
+          <!-- END INFO ABOUT SUBJECT -->
+
+          <div class="form-group row">
+              <label for="issuer" style="width: 35%;" class="col-sm-2 col-form-label">Issued by:</label>
+              <div class="col-sm-7">
+              <select  style="width: 100%;" [(ngModel)]="certificate.issuerSerialNumber" name="issuerSerialNumber" (change)="selectIssuer()">
+                  <!-- <option value="0" selected>select issuer</option> -->
+                  <option *ngFor="let issuerCert of issuerCertificates" [ngValue]="issuerCert.serialNumber"> {{ issuerCert.certificateData.commonName }} </option>   <!-- TODO: polja koja prikazujem -->
+                      <!-- usage: {{ issuerCert.certificateUsage }}, CN: {{ issuerCert.certificateData.commonName }} -->
+              </select>
+              </div>
+          </div>
+    
+          <div class="form-group row">
+              <label for="validFrom" style="width: 35%;" class="col-sm-2 col-form-label">Valid from:</label>
+              <div class="col-sm-7">
+                  <input style="width: 100%;" type="date" [(ngModel)]="certificate.validFrom" name="validFrom" 
+                  min="{{minDate | date:'yyyy-MM-dd' }}" max="{{maxDate | date:'yyyy-MM-dd' }}"
+                  [disabled]="!certificate.issuerSerialNumber" (change)="checkDates()" required>
+              </div>
+          </div>
+          
+          <div class="form-group row">
+              <label for="validTo" style="width: 35%;" class="col-sm-2 col-form-label">Valid to:</label>
+              <div class="col-sm-7">
+                  <input style="width: 100%;" type="date" [(ngModel)]="certificate.validTo" name="validTo" 
+                  min="{{minDate | date:'yyyy-MM-dd' }}" max="{{maxDate | date:'yyyy-MM-dd' }}"
+                  [disabled]="!certificate.issuerSerialNumber" (change)="checkDates()" required>
+              </div>
+          </div>
+
+          <div class="form-group row">
+              <label for="certificateUsage" style="width: 35%;" class=" col-form-label">Certificate Usage:</label>
+              <div class="col-sm-7">
+              <select name="certificateUsage" id="certificateUsage" style="width: 100%;" [(ngModel)]="certificate.certificateUsage">
+                <option value="0" selected>select usage</option>
+                <option value="keyCertSign">keyCertSign</option>
+                <option value="digitalSignature">digitalSignature</option>
+                <option value="keyEncipherment">keyEncipherment</option>
+                <option value="dataEncipherment">dataEncipherment</option>
+                <option value="cRLSign">cRLSign</option>
+                <option value="keyAgreement">keyAgreement</option>
+                <option value="encipherOnly">encipherOnly</option>
+                <option value="decipherOnly">decipherOnly</option>
+              </select>
+              </div>
+          </div>
+
+          <mat-card-actions>
+            <button style="margin:2%; margin-left: 32%; font-size: 15px; border-color: slateblue;" color="primary" mat-button>Create</button> 
+          </mat-card-actions>
+      </form>
+      </mat-card-content> 
+  </mat-card> 
+  </div> 

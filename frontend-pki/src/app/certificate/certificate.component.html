@@ -1,0 +1,105 @@
+<div>
+    <div class="card-holder row" style="width:50%; margin:0 auto;">
+      <div class="container">
+
+      <mat-card  class="example-card column" style="width: 85%;">
+          <mat-card-title style="margin-left: 25%;">Sertificate review</mat-card-title>
+          <br>
+          <!-- <mat-card-subtitle>Common name</mat-card-subtitle> -->
+          <mat-card-content>
+            <form style="margin-left: 8%;">
+              <div class="form-group row">
+                <label for="staticEmail" style="width: 35%;" class=" col-form-label">Serial number:</label>
+                <div class="col-sm-7">
+                  <label for="staticEmail" class=" col-form-label">{{certificate?.serialNumber}}</label>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="staticEmail" style="width: 35%;" class=" col-form-label">Common name:</label>
+                <div class="col-sm-7">
+                  <label for="staticEmail" class=" col-form-label">{{certificate?.commonName}}</label>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="staticEmail" style="width: 35%;" class=" col-form-label">Given name:</label>
+                <div class="col-sm-7">
+                  <label for="staticEmail" class=" col-form-label">{{certificate?.givenName}}</label>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="staticEmail" style="width: 35%;" class=" col-form-label">Surname:</label>
+                <div class="col-sm-7">
+                  <label for="staticEmail" class=" col-form-label">{{certificate?.surname}}</label>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="staticEmail" style="width: 35%;" class=" col-form-label">Country code:</label>
+                <div class="col-sm-7">
+                  <label for="staticEmail" class=" col-form-label">{{certificate?.countryCode}}</label>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="staticEmail" style="width: 35%;" class=" col-form-label">Email address:</label>
+                <div class="col-sm-7">
+                  <label for="staticEmail" class=" col-form-label">{{certificate?.emailAddress}}</label>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="staticEmail" style="width: 35%;" class=" col-form-label">Organization:</label>
+                <div class="col-sm-7">
+                  <label for="staticEmail" class=" col-form-label">{{certificate?.organization}}</label>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="staticEmail" style="width: 35%;" class=" col-form-label">Organizational unit:</label>
+                <div class="col-sm-7">
+                  <label for="staticEmail" class=" col-form-label">{{certificate?.organizationalUnit}}</label>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputPassword" style="width: 35%;" class="col-sm-2 col-form-label">Valid from:</label>
+                <div class="col-sm-7">
+                  <label for="staticEmail" class=" col-form-label">{{certificate?.validFrom}}</label>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputPassword" style="width: 35%;" class="col-sm-2 col-form-label">Valid to:</label>
+                <div class="col-sm-7">
+                  <label for="staticEmail" class=" col-form-label">{{certificate?.validTo}}</label>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputPassword" style="width: 35%;" class="col-sm-2 col-form-label">Certificate type:</label>
+                <div class="col-sm-7">
+                  <label for="staticEmail" class=" col-form-label">{{certificate?.certificateType}}</label>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputPassword" style="width: 35%;" class="col-sm-2 col-form-label">Certificate usage:</label>
+                <div class="col-sm-7">
+                  <label for="staticEmail" class=" col-form-label">{{certificate?.certificateUsage}}</label>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputPassword" style="width: 35%;" class="col-sm-2 col-form-label">Issued by:</label>
+                <div class="col-sm-7">
+                  <label for="staticEmail" class=" col-form-label"> {{issuer}}</label>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputPassword" style="width: 35%;" class="col-sm-2 col-form-label">Issued to:</label>
+                <div class="col-sm-7">
+                  <label for="staticEmail" class=" col-form-label">{{certificate?.user}}</label>
+                </div>
+              </div>
+            </form>
+          </mat-card-content> 
+          <mat-card-actions>
+          <button *ngIf="isAdmin() && !certificate?.revoked" style="margin:2%; margin-left: 40%;" mat-button (click)="revokeCertificate(certificate?.serialNumber)">Revoke</button> 
+          <button *ngIf="!expired && !certificate?.revoked" style="margin:2%; margin-left: 40%;" mat-button (click)="downloadCertificate()">Download</button> 
+          </mat-card-actions>
+      </mat-card> 
+    </div>
+
+  </div>
+</div>

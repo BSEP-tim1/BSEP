@@ -1,0 +1,35 @@
+<body class="sign-in">
+    <div class="wrapper">
+      <div class="sign-in-page">
+        <div class="signin-popup" style="align-items: center">
+          <div class="signin-pop2" style="display: flex; margin: auto; justify-content: center; background: white;">
+            <!-- <img src="../../../images/cm-logo.png" alt=""> -->
+			<div style="display: flex; margin: auto; justify-content: center;">
+				<p *ngIf="!expired" style="font-size: 25px; margin: auto; justify-content: center;display: flex; margin-top: 40px;">
+					You have successfully activated your profile
+				  </p>
+			</div>
+            <br>
+          </div>
+          <div style="display: flex; margin: auto; justify-content: center; margin-top: 50px;">
+            <button
+              *ngIf="!expired"
+              type="submit"
+              value="submit"
+              class="btn btn-danger"
+              (click)="login()"
+            >
+              Login
+            </button>
+          </div>
+          <h3 *ngIf="expired" style="margin: auto; justify-content: center;display: flex; margin-top: 30px;">
+            Token is expired.
+          </h3>
+          <!--signin-pop end-->
+        </div>
+        <!--signin-popup end-->
+      </div>
+      <!--sign-in-page end-->
+    </div>
+    <!--theme-layout end-->
+  </body>
