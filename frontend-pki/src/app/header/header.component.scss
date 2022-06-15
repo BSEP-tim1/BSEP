@@ -19,6 +19,11 @@
     float: right;
 }
 
+.left{
+    margin-right: auto;
+    float: left;
+}
+
 .app-angular-logo {
     margin: 0 4px 3px 0;
     height: 26px;
@@ -27,3 +32,8 @@
 .greeting-hamburger {
     display: none;
 } 
+
+.mat-toolbar.mat-primary {
+    background: #007bff;
+    color: #fff;
+  }

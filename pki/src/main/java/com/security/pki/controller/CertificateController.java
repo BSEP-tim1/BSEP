@@ -27,8 +27,6 @@ public class CertificateController {
 
     @Autowired
     private CertificateService certificateService;
-//    @Autowired
-//    private Base64Encoder base64Encoder;
 
     @RequestMapping(value="", method = RequestMethod.GET)
     public List<AllCertificatesViewDTO> getAll() {

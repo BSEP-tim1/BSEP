@@ -1,13 +1,17 @@
 <mat-toolbar class="app-navbar" color="primary">
-    <div class="right">
-        <div fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="flex-end center"> 
+    <div class="left">
+        <div fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="flex-end center">
             <button *ngIf="isAdmin()" mat-button mat-ripple routerLink="/admin-home">
                 <span>Home</span>
             </button> 
-            
             <button *ngIf="isClient()" mat-button mat-ripple routerLink="/user-home">
                 <span>Home</span>
             </button> 
+        </div>
+    </div>
+    <div class="right">
+        <div fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="flex-end center"> 
+            <button mat-button mat-ripple (click)="changePassword()"> CHANGE PASSWORD </button>
 
             <button *ngIf="isAdmin()" mat-button mat-ripple routerLink="/new-certificate-admin">
                 <span>New Certificate</span>
