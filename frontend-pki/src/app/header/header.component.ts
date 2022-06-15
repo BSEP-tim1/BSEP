@@ -22,7 +22,7 @@ export class HeaderComponent implements OnInit {
   }
 
   isClient(){
-    if(localStorage.getItem('role') == "USER"){
+    if(localStorage.getItem('role') == "ROLE_USER"){
       return true;
     } else {
       return false;

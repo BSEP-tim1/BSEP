@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Certificate } from '../model/certificate.model';
+import { CertificateService } from '../service/certificate.service';
 
 @Component({
   selector: 'app-user-home',
@@ -15,7 +16,11 @@ export class UserHomeComponent implements OnInit {
   email: string = '';
   user: any;
 
-  constructor(private router: Router, private http: HttpClient) { }
+  allCert : Certificate[] = []
+  displayedColumns: string[] = ['subject', 'validPeriod', 'viewCert', 'download', 'state', "revoke"];
+
+
+  constructor(private router: Router, private http: HttpClient, private certificateService: CertificateService) { }
 
 
   ngOnInit(): void {
@@ -35,7 +40,6 @@ export class UserHomeComponent implements OnInit {
     .subscribe(data => {
       this.user = data
       this.email = this.user.email
-      // alert(this.user.id)
     })
 
     this.getCertificates();
@@ -46,22 +50,29 @@ export class UserHomeComponent implements OnInit {
   }
 
   getCertificates(){
-
     this.http.get<Certificate[]>('http://localhost:9000/api/certificate/getAllByUser/' + localStorage.getItem('id'))
-    .subscribe(data => {
-      var allCertificates : Certificate[] = data
-      for(var c of allCertificates){
-        if(c.certificateType === "INTERMEDIATE"){
-          // console.log(c)
-          this.caCert.push(c);
-        }else if (c.certificateType === "END_ENTITY"){
-          this.endEntityCert.push(c)
-        }
-      }
+    .subscribe(data => {this.allCert = data });
+  }
+
+  downloadCertificate(certificate: Certificate) {
+    this.certificateService.downloadCertificate(certificate.id).subscribe(data => { 
+      let blob = new Blob([data], { type: 'application/octet-stream' })
+      let link = document.createElement('a')
+      link.href = URL.createObjectURL(blob)
+      link.download = certificate.serialNumber + ".cer"
+      link.click()
+      URL.revokeObjectURL(link.href)
+      alert('Certificate is downloaded')
     });
   }
 
-  changePassword() {
-    this.router.navigate(['change-password'])
+  revokeCertificate(serialNumber){
+    console.log(serialNumber)
+    this.http.get('http://localhost:9000/api/certificate/revokeCerificate/' + serialNumber)
+    .subscribe(data => { 
+      alert('Certificate is revoked')
+    });
+    window.location.reload();
   }
+
 }

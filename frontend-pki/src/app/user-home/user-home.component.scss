@@ -3,11 +3,6 @@ h1{
     margin-left: 1%; 
     font-style: italic;
 }
-
-section{
-    margin-left: 10%;
-    margin-right: 10%;
-}
  
 mat-card{
     width: 20%;
@@ -44,6 +39,10 @@ clear: both;
 }
 }
 
-.button{
-    margin-left: 45%;
-}
+table {
+    width: 65%;
+    position: absolute;
+    top: 250px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }

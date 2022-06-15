@@ -13,7 +13,7 @@ export class AdminHomeComponent implements OnInit {
 
   allCert : Certificate[] = []
   displayedColumns: string[] = ['subject', 'validPeriod', 'viewCert', 'download', 'state', "revoke"];
-  showCertDetails = false;
+
 
   constructor(private router: Router,
      private http: HttpClient,

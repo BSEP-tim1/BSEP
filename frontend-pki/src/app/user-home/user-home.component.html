@@ -1,7 +1,81 @@
+<div>
+    <section class="background d-flex flex-column justify-content-center">
+      <div class="container"></div>
+    </section>
+</div>
+  
+<table mat-table [dataSource]="allCert" class="mat-elevation-z8">
+    <ng-container matColumnDef="subject">
+      <th mat-header-cell *matHeaderCellDef>Issued To</th>
+      <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+    </ng-container>
+  
+    <ng-container matColumnDef="validPeriod">
+      <th mat-header-cell *matHeaderCellDef>Valid period</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.validFrom }} -
+        {{ element.validTo }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="viewCert">
+      <th mat-header-cell *matHeaderCellDef>View Certificate</th>
+      <td mat-cell *matCellDef="let element">
+        <section>
+          <button mat-raised-button color="primary" (click)="review(element.id)">
+            View
+          </button>
+        </section>
+      </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="download">
+      <th mat-header-cell *matHeaderCellDef>Download Certificate</th>
+      <td mat-cell *matCellDef="let element">
+        <section>
+          <button *ngIf="!element.revoked && element.isValid" mat-raised-button color="primary" (click)="downloadCertificate(element)" >
+            Download
+          </button>
+        </section>
+      </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="state">
+      <th mat-header-cell *matHeaderCellDef>Certificate State</th>
+      <td mat-cell *matCellDef="let element">
+        <section>
+          <button *ngIf="!element.revoked && element.isValid" mat-raised-button color="warn" [disabled]="true">
+            Valid
+          </button>
+          <button *ngIf="element.revoked" mat-raised-button color="warn" [disabled]="true">
+            Revoked
+          </button>
+          <button *ngIf="!element.isValid && !element.revoked" mat-raised-button color="warn" [disabled]="true">
+            Expired
+          </button>
+          
+        </section>
+      </td>
+    </ng-container>
 
+    <ng-container matColumnDef="revoke">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <section>
+            <button *ngIf="!element.revoked && element.isValid && element.certificateType ==='INTERMEDIATE'" mat-raised-button color="warn" (click)="revokeCertificate(element.serialNumber)">
+              Revoke
+            </button>
+          </section>
+        </td>
+      </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
+<!-- <button style="margin: 10px;" mat-raised-button color="primary" (click)="addAdmin()"> Add new admin </button> -->
 
+<!-- 
 <section>
-    <button mat-raised-button color="primary" style="margin: 10px;" (click)="changePassword()"> Change password </button>
+    <button mat-raised-button color="primary" style="margin: 10px;" "> Change password </button>
     <h1>CA certificates of {{email}}</h1>
 
     <mat-divider></mat-divider>
@@ -45,4 +119,4 @@
         </mat-card> 
     </div>
 
-</section>
+</section> -->
