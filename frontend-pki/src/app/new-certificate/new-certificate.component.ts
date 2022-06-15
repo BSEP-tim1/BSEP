@@ -68,15 +68,15 @@ export class NewCertificateComponent implements OnInit {
       })
   }
 
-  selectSubject(){
-    this.userService.findByEmail(this.certificate.subjectName).subscribe(
-      (user: User) => {
-        this.certificate.certificateDataDTO.emailAddress = this.certificate.subjectName
-        this.certificate.certificateDataDTO.userId = user.id;
-      })
+  // selectSubject(){
+  //   this.userService.findByEmail(this.certificate.subjectName).subscribe(
+  //     (user: User) => {
+  //       this.certificate.certificateDataDTO.emailAddress = this.certificate.subjectName
+  //       this.certificate.certificateDataDTO.userId = user.id;
+  //     })
 
-      this.certificate.certificateDataDTO.emailAddress = this.certificate.subjectName
-  }
+  //     this.certificate.certificateDataDTO.emailAddress = this.certificate.subjectName
+  // }
 
   selectIssuer(){
     this.certificate.validTo = undefined;
@@ -149,12 +149,7 @@ export class NewCertificateComponent implements OnInit {
     if(this.certificate.certificateType != undefined && this.certificate.certificateUsage != undefined &&
         this.certificate.issuerName != undefined && this.certificate.issuerSerialNumber != undefined &&
         this.certificate.subjectName != undefined && this.certificate.validFrom != undefined && 
-        this.certificate.validTo != undefined && 
-        this.certificate.certificateDataDTO.commonName != undefined &&
-        this.certificate.certificateDataDTO.countryCode != undefined && this.certificate.certificateDataDTO.emailAddress != undefined &&
-        this.certificate.certificateDataDTO.givenName != undefined && this.certificate.certificateDataDTO.organization != undefined &&
-        this.certificate.certificateDataDTO.organizationalUnit != undefined && this.certificate.certificateDataDTO.surname != undefined &&
-        this.certificate.certificateDataDTO.userId != undefined){
+        this.certificate.validTo != undefined ){
 
       this.certificateService.issueCertificate(this.certificate).subscribe(
         (cer: CreateCertificate) => { 

@@ -54,7 +54,7 @@ export class CertificateService {
   }
 
   findIssuerEmailBySerialNumber(dto){
-    return this._http.post('http://localhost:9000/api/certificate/findIssuerEmailBySerialNumber', dto, {responseType: 'text'})
+    return this._http.post('http://localhost:9000/api/certificate/findIssuerEmailBySerialNumber', dto)
   } 
 
   downloadCertificate(id: number){

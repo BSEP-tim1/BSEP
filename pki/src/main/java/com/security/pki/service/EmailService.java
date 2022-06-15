@@ -48,7 +48,7 @@ public class EmailService {
     public String accountActivationMessage(String token) {
         String url = "http://localhost:" + env.getProperty("frontend.port") + "/activate-account/" + token;
         String msg = "<html><body><div style=\"background: linear-gradient(#007bff , #48c6ef); height: 320px; width: 500px; font-family: Montserrat, sans-serif; text-align: center; align-items: center; color: white; margin: 10px; padding: 4px; -webkit-box-shadow: 0px 7px 12px -6px rgba(0,0,0,0.62); box-shadow: 0px 7px 12px -6px rgba(0,0,0,0.62); border-radius: 10px;\">\n" +
-                "\t\t\t<h1>Welcome to Fishing</h1>\n" +
+                "\t\t\t<h1>Welcome</h1>\n" +
                 "\t\t\t<h3 style=\"font-weight: normal;\">Verify account</h3>\n" +
                 "\n" +
                 "\t\t\t<a href=\"" + url + "\" style=\"box-shadow: -2px 7px 4px 0px #004cff18;\n" +

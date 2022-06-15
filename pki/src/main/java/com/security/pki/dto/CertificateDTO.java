@@ -20,7 +20,6 @@ public class CertificateDTO {
 	private Date validTo;
 	private String issuerName; //email
 	private String subjectName; //email
-	private CertificateDataDTO certificateDataDTO;
 	private String certificateType;
 	private String certificateUsage;
 

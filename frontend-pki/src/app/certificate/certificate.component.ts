@@ -13,9 +13,8 @@ import { ThisReceiver } from '@angular/compiler';
 })
 export class CertificateComponent implements OnInit {
 
-  certificate : any;
+  certificate : Certificate;
   id:any;
-  issuer: any = "";
   dto = {
     "serialNumber": "",
     "certType": ""
@@ -76,12 +75,6 @@ export class CertificateComponent implements OnInit {
       else if(this.certificate.certificateType == "END_ENTITY"){
         this.certificate.certificateType = "END ENTITY"
       }
-    
-      // let body = JSON.stringify(dto) 
-      console.log(dto)
-      this.certificateService.findIssuerEmailBySerialNumber(dto).subscribe((data) => {
-        this.issuer = data;
-      });
 
       this.certificateService.findBySerialNumber(this.serialNum).subscribe(
         (issuer: Certificate) => {
@@ -93,10 +86,6 @@ export class CertificateComponent implements OnInit {
         }) 
 
     });
-
-
-  
-    
   }
   
   isAdmin(){

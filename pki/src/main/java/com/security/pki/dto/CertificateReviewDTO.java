@@ -23,13 +23,6 @@ import java.util.Date;
 public class CertificateReviewDTO {
 
     private Integer id;
-    private String commonName;
-    private String givenName;
-    private String surname;
-    private String organization;
-    private String organizationalUnit;
-    private String countryCode;
-    private String emailAddress;
     private boolean revoked;
     private String validFrom;
     private String validTo;
@@ -37,16 +30,11 @@ public class CertificateReviewDTO {
     private String certificateType;
     private String serialNumber;
     private String certificateUsage;
+    private String issuerName; //email
+    private String subjectName; //email
 
     public CertificateReviewDTO(MyCertificate m){
         this.id = m.getId();
-        this.commonName = m.getCertificateData().getCommonName();
-        this.givenName = m.getCertificateData().getGivenName();
-        this.surname = m.getCertificateData().getSurname();
-        this.organization = m.getCertificateData().getOrganization();
-        this.organizationalUnit = m.getCertificateData().getOrganizationalUnit();
-        this.countryCode = m.getCertificateData().getCountryCode();
-        this.emailAddress = m.getCertificateData().getEmailAddress();
         this.revoked = m.isRevoked();
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         this.validFrom = dateFormat.format(m.getValidFrom());
@@ -55,5 +43,6 @@ public class CertificateReviewDTO {
         this.certificateType = m.getCertificateType().toString();
         this.serialNumber = m.getSerialNumber();
         this.certificateUsage = m.getCertificateUsage();
+        this.issuerName = m.getIssuerName();
     }
 }

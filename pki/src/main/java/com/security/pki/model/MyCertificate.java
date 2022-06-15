@@ -45,8 +45,6 @@ public class MyCertificate {
 	@Column(name = "certificateUsage", nullable = false)
 	private String certificateUsage;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "certificateData_id", referencedColumnName = "id", nullable = false)
-	private CertificateData certificateData;
-
+	@Column(name = "issuerName")
+	private String issuerName;
 }

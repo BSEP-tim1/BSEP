@@ -36,50 +36,7 @@
                 </select>
                 </div>
                 </div>
-            </ng-template>    
-                
-            <!-- SUBJECT INFO -->
-            <div class="form-group row">
-                <label for="commonName" style="width: 35%;" class=" col-form-label">Common name:</label>
-                <div class="col-sm-7">
-                    <input style="width: 100%;" type="text" [(ngModel)]="certificate.certificateDataDTO.commonName" name="commonName" required>
-                </div>
-            </div> 
-
-            <div class="form-group row">
-                <label for="givenName" style="width: 35%;" class=" col-form-label">Given name:</label>
-                <div class="col-sm-7">
-                    <input style="width: 100%;" type="text" [(ngModel)]="certificate.certificateDataDTO.givenName" name="givenName" required>
-                </div>
-            </div> 
-
-            <div class="form-group row">
-                <label for="surname" style="width: 35%;" class=" col-form-label">Surname:</label>
-                <div class="col-sm-7">
-                    <input style="width: 100%;" type="text" [(ngModel)]="certificate.certificateDataDTO.surname" name="surname" required>
-                </div>
-            </div> 
-
-            <div class="form-group row">
-                <label for="organization" style="width: 35%;" class=" col-form-label">Organization:</label>
-                <div class="col-sm-7">
-                    <input style="width: 100%;" type="text" [(ngModel)]="certificate.certificateDataDTO.organization" name="organization" required>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label for="organizationalUnit" style="width: 35%;" class=" col-form-label">Organizational Unit:</label>
-                <div class="col-sm-7">
-                    <input style="width: 100%;" type="text" [(ngModel)]="certificate.certificateDataDTO.organizationalUnit" name="organizationalUnit" required>
-                </div>
-            </div> 
-
-            <div class="form-group row">
-                <label for="countryCode" style="width: 35%;" class=" col-form-label">Country code:</label>
-                <div class="col-sm-7">
-                    <input style="width: 100%;" type="text" [(ngModel)]="certificate.certificateDataDTO.countryCode" name="countryCode" required>
-                </div>
-            </div> 
+            </ng-template> 
 
             <div class="form-group row">
                 <label for="countryCode" style="width: 35%;" class=" col-form-label">Email:</label>
@@ -87,8 +44,6 @@
                     <label style="width: 100%;"> {{ certificate.subjectName }} </label>
                 </div>
             </div>
-            <!-- END INFO ABOUT SUBJECT -->
-
 
             <div class="form-group row" *ngIf = "certificate.certificateType=='SELF_SIGNED';else elseBlock">
                 <label for="issuer" style="width: 35%;" class="col-sm-2 col-form-label">Issued by:</label>
@@ -102,9 +57,7 @@
                     <label for="issuer" style="width: 35%;" class="col-sm-2 col-form-label">Issued by:</label>
                     <div class="col-sm-7">
                     <select  style="width: 100%;" [(ngModel)]="certificate.issuerSerialNumber" name="issuerSerialNumber" (change)="selectIssuer()">
-                        <!-- <option value="0" selected>select issuer</option> -->
-                        <option *ngFor="let issuerCert of issuerCertificates" [ngValue]="issuerCert.serialNumber"> {{ issuerCert.certificateData.commonName }} </option>   <!-- TODO: polja koja prikazujem -->
-                        <!-- usage: {{ issuerCert.certificateUsage }}, CN: {{ issuerCert.certificateData.commonName }} -->
+                        <option *ngFor="let issuerCert of issuerCertificates" [ngValue]="issuerCert.serialNumber"> {{ issuerCert.user.email}} </option>
                     </select>
                     </div>
                 </div>
@@ -146,7 +99,7 @@
             </div>
 
             <mat-card-actions>
-                <button style="margin:2%; margin-left: 32%; font-size: 15px; border-color: slateblue;" color="primary" mat-button>Create</button> 
+                <button style="margin:2%; margin-left: 32%; font-size: 15px; color: #007bff;" color="primary" mat-button>Create</button> 
             </mat-card-actions>
         </form>
         </mat-card-content> 

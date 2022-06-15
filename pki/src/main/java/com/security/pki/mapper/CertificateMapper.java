@@ -34,8 +34,6 @@ public class CertificateMapper {
 		dto.setValidFrom(certificate.getValidFrom());
 		dto.setValidTo(certificate.getValidTo());
 		dto.setId(certificate.getId());
-		CertificateDataMapper cdMapper = new CertificateDataMapper();
-		dto.setCertificateDataDTO(cdMapper.certDataToCertDTO(certificate.getCertificateData()));
 		dto.setCertificateType(certificate.getCertificateType().toString());
 		dto.setCertificateUsage(dto.getCertificateUsage());
 		return dto;
@@ -44,7 +42,6 @@ public class CertificateMapper {
 	public AllCertificatesViewDTO certificateWithCommonNameToCertificateDto(MyCertificate certificate) {
 		AllCertificatesViewDTO dto = new AllCertificatesViewDTO();
 		dto.setId(certificate.getId());
-		dto.setCommonName(certificate.getCertificateData().getCommonName());
 		dto.setValidFrom(convertDateToString(certificate.getValidFrom()));
 		dto.setValidTo(convertDateToString(certificate.getValidTo()));
 		dto.setEmail(certificate.getUser().getEmail());
@@ -72,7 +69,6 @@ public class CertificateMapper {
 		cert.setRevoked(false);
 		cert.setCertificateUsage(dto.getCertificateUsage());
 		cert.setUser(user);
-		cert.setCertificateData(new CertificateDataMapper().CertDataDtoToCertData(dto.getCertificateDataDTO()));
 		return cert;
 	}
 
@@ -84,7 +80,6 @@ public class CertificateMapper {
 		cert.setRevoked(false);
 		cert.setCertificateUsage(dto.getCertificateUsage());
 		cert.setUser(user);
-		cert.setCertificateData(new CertificateDataMapper().CertDataDtoToCertData(dto.getCertificateDataDTO()));
 		return cert;
 	}
 

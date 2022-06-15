@@ -326,6 +326,7 @@ public class CertificateService {
         }
         MyCertificate myCertificate = new CertificateMapper().CreateCertificateDtoToCertificate(dto, user);
         myCertificate.setSerialNumber(serialNumber);
+        myCertificate.setIssuerName(dto.getIssuerName());
         certificateRepository.save(myCertificate);
     }
 
@@ -336,6 +337,7 @@ public class CertificateService {
         }
         MyCertificate myCertificate = new CertificateMapper().CreateCertificateDtoToCertificate(dto, user);
         myCertificate.setSerialNumber(serialNumber);
+        myCertificate.setIssuerName(dto.getIssuerName());
         certificateRepository.save(myCertificate);
     }
 
@@ -380,34 +382,14 @@ public class CertificateService {
 
     private SubjectData generateSubjectDataForSelfSigned(CreateSelfSignedCertificateDTO dto, KeyPair keyPairSubject) {
         X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
-        builder.addRDN(BCStyle.CN, dto.getCertificateDataDTO().getCommonName());
-        builder.addRDN(BCStyle.SURNAME, dto.getCertificateDataDTO().getSurname());
-        builder.addRDN(BCStyle.GIVENNAME, dto.getCertificateDataDTO().getGivenName());
-        builder.addRDN(BCStyle.O, dto.getCertificateDataDTO().getOrganization());
-        builder.addRDN(BCStyle.OU, dto.getCertificateDataDTO().getOrganizationalUnit());
-        builder.addRDN(BCStyle.POSTAL_CODE, dto.getCertificateDataDTO().getCountryCode());
-        builder.addRDN(BCStyle.E, dto.getCertificateDataDTO().getEmailAddress());
-        //UID (USER ID) je ID korisnika
-        String id = dto.getCertificateDataDTO().getUserId().toString();
-        builder.addRDN(BCStyle.UID, id);
-
+        builder.addRDN(BCStyle.CN, dto.getSubjectName());
         return new SubjectData(keyPairSubject.getPublic(), builder.build());
     }
 
 
     private SubjectData generateSubjectData(CreateCertificateDTO dto, KeyPair keyPairSubject) {
         X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
-        builder.addRDN(BCStyle.CN, dto.getCertificateDataDTO().getCommonName());
-        builder.addRDN(BCStyle.SURNAME, dto.getCertificateDataDTO().getSurname());
-        builder.addRDN(BCStyle.GIVENNAME, dto.getCertificateDataDTO().getGivenName());
-        builder.addRDN(BCStyle.O, dto.getCertificateDataDTO().getOrganization());
-        builder.addRDN(BCStyle.OU, dto.getCertificateDataDTO().getOrganizationalUnit());
-        builder.addRDN(BCStyle.POSTAL_CODE, dto.getCertificateDataDTO().getCountryCode());
-        builder.addRDN(BCStyle.E, dto.getCertificateDataDTO().getEmailAddress());
-
-        String id = dto.getCertificateDataDTO().getUserId().toString();
-        builder.addRDN(BCStyle.UID, id);
-
+        builder.addRDN(BCStyle.CN, dto.getSubjectName());
         return new SubjectData(keyPairSubject.getPublic(), builder.build());
     }
     
