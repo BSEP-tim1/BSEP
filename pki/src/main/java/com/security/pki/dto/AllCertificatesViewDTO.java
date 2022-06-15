@@ -21,4 +21,5 @@ public class AllCertificatesViewDTO {
     private String email;
     private Boolean isValid;
     private boolean isRevoked;
+    private String serialNumber;
 }

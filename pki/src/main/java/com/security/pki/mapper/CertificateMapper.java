@@ -48,7 +48,8 @@ public class CertificateMapper {
 		dto.setValidFrom(convertDateToString(certificate.getValidFrom()));
 		dto.setValidTo(convertDateToString(certificate.getValidTo()));
 		dto.setEmail(certificate.getUser().getEmail());
-		dto.setCertificateType(certificate.getCertificateType().toString());		// TODO:
+		dto.setCertificateType(certificate.getCertificateType().toString());
+		dto.setSerialNumber(certificate.getSerialNumber());
 		Calendar today = Calendar.getInstance();
 		today.clear(Calendar.HOUR); today.clear(Calendar.MINUTE); today.clear(Calendar.SECOND);
 		dto.setIsValid(certificate.getValidTo().after(today.getTime()));

@@ -98,33 +98,12 @@ export class CertificateComponent implements OnInit {
   
     
   }
-
-  downloadCertificate() {
-    this.certificateService.downloadCertificate(this.id).subscribe(data => { 
-      let blob = new Blob([data], { type: 'application/octet-stream' })
-      let link = document.createElement('a')
-      link.href = URL.createObjectURL(blob)
-      link.download = this.certificate.serialNumber + ".cer"
-      link.click()
-      URL.revokeObjectURL(link.href)
-      alert('Certificate is downloaded')
-    });
-  }
-
+  
   isAdmin(){
     if(localStorage.getItem('role') == "ROLE_ADMIN"){
       return true;
     } else {
       return false;
     }
-  }
-
-  revokeCertificate(serialNumber){
-    console.log(serialNumber)
-    this.http.get('http://localhost:9000/api/certificate/revokeCerificate/' + serialNumber)
-    .subscribe(data => { 
-      alert('Certificate is revoked')
-    });
-    this.router.navigate(['admin-home'])
   }
 }

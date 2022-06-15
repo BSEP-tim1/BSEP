@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Certificate } from '../model/certificate.model';
 import { HttpClient } from '@angular/common/http';
+import { CertificateService } from '../service/certificate.service';
 
 @Component({
   selector: 'app-admin-home',
@@ -10,11 +11,14 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AdminHomeComponent implements OnInit {
 
-  rootCert : Certificate[] = []
-  caCert : Certificate[] = []
-  endEntityCert : Certificate[] = []
- 
-  constructor(private router: Router, private http: HttpClient) { }
+  allCert : Certificate[] = []
+  displayedColumns: string[] = ['subject', 'validPeriod', 'viewCert', 'download', 'state', "revoke"];
+  showCertDetails = false;
+
+  constructor(private router: Router,
+     private http: HttpClient,
+     private certificateService: CertificateService,
+     ) { }
 
   ngOnInit(): void { 
 
@@ -30,16 +34,7 @@ export class AdminHomeComponent implements OnInit {
 
     this.http.get<Certificate[]>('http://localhost:9000/api/certificate')
     .subscribe(data => {
-      var allCertificates : Certificate[] = data   
-      for(var c of allCertificates){
-        if(c.certificateType === "SELF_SIGNED"){
-          this.rootCert.push(c)
-        }else if(c.certificateType === "INTERMEDIATE"){
-          this.caCert.push(c);
-        }else{
-          this.endEntityCert.push(c)
-        }
-      }
+      this.allCert = data 
     });
 
   }
@@ -51,5 +46,25 @@ export class AdminHomeComponent implements OnInit {
     this.router.navigate(['/new-admin'])
   }
 
+  downloadCertificate(certificate: Certificate) {
+    this.certificateService.downloadCertificate(certificate.id).subscribe(data => { 
+      let blob = new Blob([data], { type: 'application/octet-stream' })
+      let link = document.createElement('a')
+      link.href = URL.createObjectURL(blob)
+      link.download = certificate.serialNumber + ".cer"
+      link.click()
+      URL.revokeObjectURL(link.href)
+      alert('Certificate is downloaded')
+    });
+  }
+
+  revokeCertificate(serialNumber){
+    console.log(serialNumber)
+    this.http.get('http://localhost:9000/api/certificate/revokeCerificate/' + serialNumber)
+    .subscribe(data => { 
+      alert('Certificate is revoked')
+    });
+    window.location.reload();
+  }
 
 }

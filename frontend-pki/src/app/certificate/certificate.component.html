@@ -1,4 +1,4 @@
-<div>
+<div class="mt-5">
     <div class="card-holder row" style="width:50%; margin:0 auto;">
       <div class="container">
 
@@ -93,11 +93,7 @@
                 </div>
               </div>
             </form>
-          </mat-card-content> 
-          <mat-card-actions>
-          <button *ngIf="isAdmin() && !certificate?.revoked" style="margin:2%; margin-left: 40%;" mat-button (click)="revokeCertificate(certificate?.serialNumber)">Revoke</button> 
-          <button *ngIf="!expired && !certificate?.revoked" style="margin:2%; margin-left: 40%;" mat-button (click)="downloadCertificate()">Download</button> 
-          </mat-card-actions>
+          </mat-card-content>
       </mat-card> 
     </div>
 
