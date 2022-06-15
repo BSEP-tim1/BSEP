@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
             }
         }
         if (!checkPasswordCriteria(dto.password)) {
-            String pswdError = "Password must contain minimum eight characters, at least one uppercase " +
+            String pswdError = "Password must contain minimum 8 characters, at least one uppercase " +
                     "letter, one lowercase letter, one number and one special character and " +
                     "must not contain white spaces";
             System.out.println(pswdError);
@@ -72,7 +72,6 @@ public class UserServiceImpl implements UserService {
         newUser.setUserType(role);
         newUser.setPassword(passwordEncoder.encode(dto.password));
 
-        // TODO SD: slanje emaila
         VerificationToken verificationToken = new VerificationToken(newUser);
         if (!emailService.sendAccountActivationMail(verificationToken.getToken(), newUser.getEmail())) {
             throw new Exception("Email for account verification not sent, try again");

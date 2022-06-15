@@ -66,7 +66,6 @@ public class KeyStoreWriterService {
         }
     }
 
-    // Created by Sanja
     public KeyStore getKeyStore(String fileName, char[] password) {
         try {
             if(fileName != null) {

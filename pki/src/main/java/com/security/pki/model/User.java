@@ -35,8 +35,6 @@ public class User implements UserDetails {
 	@JoinColumn(name = "role_id")
 	private UserType userType;
 	
-	//private AuthorityType authorityType;		// TODO: mozda izbrisati
-	
 	@OneToMany(mappedBy = "user")
 	@JsonBackReference
 	private List<MyCertificate> certificates;

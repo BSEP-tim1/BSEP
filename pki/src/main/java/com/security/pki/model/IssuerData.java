@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @Getter
 public class IssuerData {
-    private X500Name x500name; // mapping!
+    private X500Name x500name;
     private PrivateKey privateKey;
 
 }

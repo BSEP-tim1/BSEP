@@ -50,7 +50,6 @@ public class CertificateService {
     private CertificateRepository certificateRepository;
     @Autowired
     private CertificateChainRepository certificateChainRepository;
-
     @Autowired
     private UserService userService;
 
@@ -115,17 +114,12 @@ public class CertificateService {
             serialNumber = UUID.randomUUID().toString().replace("-", "").toUpperCase();
         }
         try {
-            //Posto klasa za generisanje sertifikata ne moze da primi direktno privatni kljuc, pravi se builder za objekat
-            //Ovaj objekat sadrzi privatni kljuc izdavaoca sertifikata i koristiti se za potpisivanje sertifikata
-            //Parametar koji se prosledjuje je algoritam koji se koristi za potpisivanje sertifiakta
             JcaContentSignerBuilder builder = new JcaContentSignerBuilder("SHA256WithRSAEncryption");
 
             builder = builder.setProvider("BC");
 
-            //Formira se objekat koji ce sadrzati privatni kljuc i koji ce se koristiti za potpisivanje sertifikata
-            ContentSigner contentSigner = builder.build(issuerData.getPrivateKey());    // ContentSigner je wrapper oko private kljuca
+            ContentSigner contentSigner = builder.build(issuerData.getPrivateKey());
 
-            //Postavljaju se podaci za generisanje sertifikata
             X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(
                     issuerData.getX500name(),
                     new BigInteger(serialNumber, 16),
@@ -162,23 +156,16 @@ public class CertificateService {
                     usage = new KeyUsage(KeyUsage.keyCertSign);
             }
 
-            //KeyUsage usage = new KeyUsage(KeyUsage.keyCertSign | KeyUsage.digitalSignature | KeyUsage.keyEncipherment | KeyUsage.dataEncipherment | KeyUsage.cRLSign);
             certGen.addExtension(Extension.keyUsage, false, usage);
 
-            // keyCertSign, digitalSignature, keyEncipherment, dataEncipherment, cRLSign, keyAgreement, encipherOnly, decipherOnly
+            X509CertificateHolder certHolder = certGen.build(contentSigner);
 
-            //Generise se sertifikat
-            X509CertificateHolder certHolder = certGen.build(contentSigner);    // povezujuemo sertifikat sa content signer-om (odnosno digitalnim potpisom)
-            // napravi sve sa prethodno popunjenim podacima i potpisi sa privatnim kljucem onoga ko izdaje sertifikat
-
-            //Builder generise sertifikat kao objekat klase X509CertificateHolder
-            //Nakon toga je potrebno certHolder konvertovati u sertifikat, za sta se koristi certConverter
             JcaX509CertificateConverter certConverter = new JcaX509CertificateConverter();
             certConverter = certConverter.setProvider("BC");
 
             X509Certificate x509Certificate = certConverter.getCertificate(certHolder);
 
-            x509Certificate.verify(keyPair.getPublic());       // provera digitalnog potpisa
+            x509Certificate.verify(keyPair.getPublic());
 
             writeCertificate(dto.getCertificateType(), x509Certificate, keyPair.getPrivate());
 
@@ -190,7 +177,6 @@ public class CertificateService {
             cc.setSubjectSerialNumber(serialNumber);
             this.certificateChainRepository.save(cc);
 
-            //Konvertuje objekat u sertifikat (izvlacenje konkretnog sertifikata)
             return x509Certificate;
         } catch (CertificateEncodingException e) {
             e.printStackTrace();
@@ -205,10 +191,10 @@ public class CertificateService {
         } catch (CertIOException e) {
             e.printStackTrace();
         } catch (SignatureException e) {
-            System.out.println("\nValidacija potpisa neuspesna :(");
+            System.out.println("\nValidacija potpisa neuspesna");
             e.printStackTrace();
         } catch (Exception exception) {
-            System.out.println(" ********** cuvanje sertifikata u bazu nije uspelo **********");
+            System.out.println(" Cuvanje u bazu neuspesno ");
             exception.printStackTrace();
         }
         return null;
@@ -229,7 +215,7 @@ public class CertificateService {
         }
 
         java.security.cert.Certificate certificateIssuer = ksr.readCertificate(getPath(filename), password, new BigInteger(dto.getIssuerSerialNumber(), 16).toString());
-        PrivateKey privateKeyIssuer = findPrivateKeyFromKeyStore(getPath(filename), new BigInteger(dto.getIssuerSerialNumber(), 16).toString());  // TODO: mozda ne radi
+        PrivateKey privateKeyIssuer = findPrivateKeyFromKeyStore(getPath(filename), new BigInteger(dto.getIssuerSerialNumber(), 16).toString());
 
         X500Name issuer = new X500NameBuilder().addRDN(BCStyle.E, dto.getIssuerName()).build();
         IssuerData issuerData = new IssuerData(issuer, privateKeyIssuer);
@@ -288,22 +274,17 @@ public class CertificateService {
                     usage = new KeyUsage(KeyUsage.keyCertSign);
             }
 
-            //KeyUsage usage = new KeyUsage(KeyUsage.keyCertSign | KeyUsage.digitalSignature | KeyUsage.keyEncipherment | KeyUsage.dataEncipherment | KeyUsage.cRLSign);
             certGen.addExtension(Extension.keyUsage, false, usage);
 
-            //Generise se sertifikat
             X509CertificateHolder certHolder = certGen.build(contentSigner);    // povezujuemo sertifikat sa content signer-om (odnosno digitalnim potpisom)
             // napravi sve sa prethodno popunjenim podacima i potpisi sa privatnim kljucem onoga ko izdaje sertifikat
 
-            //Builder generise sertifikat kao objekat klase X509CertificateHolder
-            //Nakon toga je potrebno certHolder konvertovati u sertifikat, za sta se koristi certConverter
             JcaX509CertificateConverter certConverter = new JcaX509CertificateConverter();
             certConverter = certConverter.setProvider("BC");
 
             X509Certificate x509Certificate = certConverter.getCertificate(certHolder);
 
-//            KeyPair keyPairSubject111 = generateKeyPair();   koristeno za neuspesnu validaciju digitalnog potpisa
-            x509Certificate.verify(certificateIssuer.getPublicKey());       // provera digitalnog potpisa
+            x509Certificate.verify(certificateIssuer.getPublicKey());
 
             writeCertificate(dto.getCertificateType(), x509Certificate, keyPairSubject.getPrivate());
 
@@ -314,7 +295,6 @@ public class CertificateService {
             cc.setIssuerSerialNumber(dto.getIssuerSerialNumber());
             cc.setSubjectSerialNumber(serialNumber);
             this.certificateChainRepository.save(cc);
-            //Konvertuje objekat u sertifikat (izvlacenje konkretnog sertifikata)
             return x509Certificate;
 
         } catch (CertificateEncodingException e) {
@@ -330,10 +310,10 @@ public class CertificateService {
         } catch (CertIOException e) {
             e.printStackTrace();
         } catch (SignatureException e) {
-            System.out.println("\nValidacija potpisa neuspesna :(");
+            System.out.println("\nValidacija potpisa neuspesna");
             e.printStackTrace();
         } catch (Exception exception) {
-            System.out.println(" ********** cuvanje sertifikata u bazu nije uspelo **********");
+            System.out.println(" cuvanje u bazu neuspesno ");
             exception.printStackTrace();
         }
         return null;
@@ -361,10 +341,6 @@ public class CertificateService {
 
     private void writeCertificate(String certificateType, X509Certificate x509Certificate, PrivateKey privateKey) {
 
-        //ksw.loadKeyStore(null, password.toCharArray()); // TODO: load null ako nije kreirano
-
-        //ksw.write(x509Certificate.getSerialNumber().toString(), privateKey, password.toCharArray(), x509Certificate);
-
         if (certificateType.equals(CertificateType.END_ENTITY.toString())) {
             ksw.loadKeyStore(getPath("ee.jks"), password.toCharArray());
             ksw.write(x509Certificate.getSerialNumber().toString(), privateKey, password.toCharArray(), x509Certificate);
@@ -384,8 +360,6 @@ public class CertificateService {
     }
 
     private void saveIssuerPrivateKey(X509Certificate x509Certificate, PrivateKey privateKeyIssuer) {
-
-        //ksw.loadKeyStore(null, password.toCharArray());
         ksw.loadKeyStore(getPath("issuers.jks"), password.toCharArray());
         ksw.write(x509Certificate.getSerialNumber().toString(), privateKeyIssuer, password.toCharArray(), x509Certificate);
         ksw.saveKeyStore(getPath("issuers.jks"), password.toCharArray());
@@ -395,9 +369,9 @@ public class CertificateService {
 
     private void readCertificate(X509Certificate x509Certificate, String path) {
         java.security.cert.Certificate c = ksr.readCertificate(getPath(path), password, x509Certificate.getSerialNumber().toString());
-        System.out.println("----------------------------------UCITAN--------------------------------------");
+        System.out.println("------------------------UCITAN------------------------");
         System.out.println(c);
-        System.out.println("----------------------------------KRAJ----------------------------------------");
+        System.out.println("------------------------KRAJ------------------------");
     }
 
     private String getPath(String path) {
@@ -405,8 +379,6 @@ public class CertificateService {
     }
 
     private SubjectData generateSubjectDataForSelfSigned(CreateSelfSignedCertificateDTO dto, KeyPair keyPairSubject) {
-        //klasa X500NameBuilder pravi X500Name objekat koji predstavlja podatke o vlasniku
-        // (konkretno, objekat se napravi nakon poziva metode build nad objektom tipa X500NameBuilder)
         X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
         builder.addRDN(BCStyle.CN, dto.getCertificateDataDTO().getCommonName());
         builder.addRDN(BCStyle.SURNAME, dto.getCertificateDataDTO().getSurname());
@@ -415,7 +387,6 @@ public class CertificateService {
         builder.addRDN(BCStyle.OU, dto.getCertificateDataDTO().getOrganizationalUnit());
         builder.addRDN(BCStyle.POSTAL_CODE, dto.getCertificateDataDTO().getCountryCode());
         builder.addRDN(BCStyle.E, dto.getCertificateDataDTO().getEmailAddress());
-
         //UID (USER ID) je ID korisnika
         String id = dto.getCertificateDataDTO().getUserId().toString();
         builder.addRDN(BCStyle.UID, id);
@@ -425,8 +396,6 @@ public class CertificateService {
 
 
     private SubjectData generateSubjectData(CreateCertificateDTO dto, KeyPair keyPairSubject) {
-        //klasa X500NameBuilder pravi X500Name objekat koji predstavlja podatke o vlasniku
-        // (konkretno, objekat se napravi nakon poziva metode build nad objektom tipa X500NameBuilder)
         X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
         builder.addRDN(BCStyle.CN, dto.getCertificateDataDTO().getCommonName());
         builder.addRDN(BCStyle.SURNAME, dto.getCertificateDataDTO().getSurname());
@@ -445,10 +414,9 @@ public class CertificateService {
     private KeyPair generateKeyPair() {
         try {
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-
             // RSA algoritam trazi neki seed, neku pocetnu vrednost od koje krece (s kojom vrsi XOR veliki broj puta)
-            SecureRandom random = SecureRandom.getInstance("SHA1PRNG", "SUN");      // TODO: proveriti
-            keyGen.initialize(2048, random);        // inicijalizacija generatora, duzina kljuca je 2048
+            SecureRandom random = SecureRandom.getInstance("SHA1PRNG", "SUN");
+            keyGen.initialize(2048, random);
 
             return keyGen.generateKeyPair();
         } catch (NoSuchAlgorithmException e) {
@@ -470,8 +438,7 @@ public class CertificateService {
         return true;
     }
 
-    //findPrivateKeyFromKeyStore(getPath("issuers.jks"), x509Certificate.getSerialNumber().toString()); OVAKO POZIV!!!!!!!!!!!!!
-    private PrivateKey findPrivateKeyFromKeyStore(String fileName, String serialNumber) { //TODO: promeniti da se salje pass usera???
+    private PrivateKey findPrivateKeyFromKeyStore(String fileName, String serialNumber) {
         ksw.loadKeyStore(fileName, password.toCharArray());
         PrivateKey pk = ksr.readPrivateKey(fileName, password, serialNumber, password);
         return pk;
@@ -491,20 +458,9 @@ public class CertificateService {
             keyStore = ksw.getKeyStore(getPath("root.jks"), password.toCharArray());
         }
         Certificate certificate = keyStore.getCertificate(new BigInteger(serialNumber, 16).toString());
-        System.out.println("&&&&&&&&&&&&&& certificate &&&&&&&&&&&&&&&&&&&&");
         System.out.println(certificate.toString());
-        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
         return certificate;
     }
-
-    public void downloadCert(Certificate certificate, String serialNumber) throws CertificateEncodingException, IOException {
-        FileOutputStream os = new FileOutputStream(serialNumber + ".cer");
-        os.write("-----BEGIN CERTIFICATE-----\n".getBytes("US-ASCII"));
-        os.write(Base64.encodeBase64(certificate.getEncoded(), true));
-        os.write("-----END CERTIFICATE-----\n".getBytes("US-ASCII"));
-        os.close();
-    }
-
 
     public void revokeCerificate(String serialNumber){
         List<String> revokeList = new ArrayList<>();
@@ -519,17 +475,15 @@ public class CertificateService {
             for(String s: revokeList){
                 List <CertificateChain> pom = certificateChainRepository.findByIssuerSerialNumber(s);
                 for(CertificateChain cc: pom){
-                    System.out.println("OVI SU PRONADJENI: " + cc);
+                    System.out.println("PRONADJENI: " + cc);
 
                     if(!cc.getSubjectSerialNumber().equals(serialNumber)) {
                         MyCertificate ms = certificateRepository.findBySerialNumber(cc.getSubjectSerialNumber());
                         ms.setRevoked(true);
                         certificateRepository.save(ms);
-                        findForRevoke.add(cc.getSubjectSerialNumber());                    }
-
-
+                        findForRevoke.add(cc.getSubjectSerialNumber());
+                    }
                 }
-
             }
             revokeList.clear();
             revokeList.addAll(findForRevoke);
@@ -539,40 +493,25 @@ public class CertificateService {
 
     public String findIssuerEmailBySerialNumber(RevokeCertificateDTO dto){
         if(dto.getCertType().equals(CertificateType.SELF_SIGNED.toString())){
-            System.out.println("U SS SAM");
-
             List<X509Certificate> roots= ksr.getCertificatesInKeyStore(getPath("root.jks"), password);
-            for(X509Certificate c: roots){
-                String serial = new BigInteger(dto.getSerialNumber(), 16).toString();
-                String serijski = c.getSerialNumber().toString();
-                System.out.println("SERIJSKI SA FRONTA: " + serial);
-                System.out.println("SERIJSKI SA BEKA: " + serijski);
-                if(c.getSerialNumber().toString().equals(new BigInteger(dto.getSerialNumber(), 16).toString())){
-                    System.out.println("ISSUER: " + c.getIssuerX500Principal().toString().split("=")[1]);
-                    return c.getIssuerX500Principal().toString().split("=")[1];
-                }
-            }
+            findIssuerEmail(roots, dto);
         }
         else   if(dto.getCertType().equals(CertificateType.INTERMEDIATE.toString())){
-            System.out.println("U CA SAM");
-
             List<X509Certificate> roots= ksr.getCertificatesInKeyStore(getPath("ca.jks"), password);
-            for(X509Certificate c: roots){
-                if(c.getSerialNumber().toString().equals(new BigInteger(dto.getSerialNumber(), 16).toString())){
-                    System.out.println("ISSUER: " + c.getIssuerX500Principal().toString().split("=")[1]);
-                    return c.getIssuerX500Principal().toString().split("=")[1];
-                }
-            }
+            findIssuerEmail(roots, dto);
         }
         else   if(dto.getCertType().equals(CertificateType.END_ENTITY.toString())){
-            System.out.println("U EE SAM");
-
             List<X509Certificate> roots= ksr.getCertificatesInKeyStore(getPath("ee.jks"), password);
-            for(X509Certificate c: roots){
-                if(c.getSerialNumber().toString().equals(new BigInteger(dto.getSerialNumber(), 16).toString())){
-                    System.out.println("ISSUER: " + c.getIssuerX500Principal().toString().split("=")[1]);
-                    return c.getIssuerX500Principal().toString().split("=")[1];
-                }
+            findIssuerEmail(roots, dto);
+        }
+        return null;
+    }
+
+    private String findIssuerEmail(List<X509Certificate> roots, RevokeCertificateDTO dto){
+        for(X509Certificate c: roots){
+            if(c.getSerialNumber().toString().equals(new BigInteger(dto.getSerialNumber(), 16).toString())){
+                System.out.println("ISSUER: " + c.getIssuerX500Principal().toString().split("=")[1]);
+                return c.getIssuerX500Principal().toString().split("=")[1];
             }
         }
         return null;

@@ -28,7 +28,7 @@ public class UserController {
     private UserService userService;
 
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getById/{id}")
+    @GetMapping(value = "/getById/{id}")
     public ResponseEntity getUserById(@PathVariable Integer id) {
         User user = userService.findUserById(id);
         if(user == null) {
@@ -37,25 +37,25 @@ public class UserController {
         return ResponseEntity.ok(new UserMapper().UserToUserDto(user));
     }
 
-    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, value = "/addAdmin")
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, value = "/addAdmin")
     public ResponseEntity<?> addAdmin(@RequestBody SignUpUserDTO dto) throws Exception {
         User user = userService.registerAdmin(dto);
         return ResponseEntity.ok(user.getId());
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/findAll")
+    @GetMapping(value = "/findAll")
     public ResponseEntity<List<User>> findAll() {
         List<User> users = userService.findAll();
         return ResponseEntity.ok(users);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getByEmail/{email}")
+    @GetMapping(value = "/getByEmail/{email}")
     public ResponseEntity<User> findByEmail(@PathVariable String email) {
         User user = userService.findByEmail(email);
         return ResponseEntity.ok(user);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/findAllClients")
+    @GetMapping(value = "/findAllClients")
     public ResponseEntity<List<User>> findAllClients() {
         List<User> users = new ArrayList<>();
         for (User u: userService.findAll()) {
@@ -66,7 +66,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @RequestMapping(method = RequestMethod.POST,value = "/changePassword",
+    @PostMapping(value = "/changePassword",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO dto, Principal user) throws Exception {
         try {

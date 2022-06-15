@@ -28,12 +28,12 @@ public class CertificateController {
     @Autowired
     private CertificateService certificateService;
 
-    @RequestMapping(value="", method = RequestMethod.GET)
+    @GetMapping(value="")
     public List<AllCertificatesViewDTO> getAll() {
         return this.certificateService.findAll();
     }
 
-    @RequestMapping(value="/getAllByUser/{id}", method = RequestMethod.GET)
+    @GetMapping(value="/getAllByUser/{id}")
     public List<AllCertificatesViewDTO> getAllByUser(@PathVariable Integer id) {
         return this.certificateService.findAllByUser(id);
     }
@@ -45,7 +45,6 @@ public class CertificateController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Certificate certificate = certificateService.findCertificateBySerialNumber(cert.getSerialNumber(), cert.getCertificateType().toString());
-        //certificateService.downloadCert(certificate, cert.getSerialNumber());
         var headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename =" + cert.getSerialNumber() +".cer");
 
@@ -60,69 +59,48 @@ public class CertificateController {
         }
     }
 
-    @RequestMapping(value="/findById/{id}", method = RequestMethod.GET)
+    @GetMapping(value="/findById/{id}")
     public CertificateReviewDTO findById(@PathVariable Integer id) {
         return this.certificateService.findDtoById(id);
     }
 
-    @RequestMapping(value="/create", method = RequestMethod.POST)
+    @PostMapping(value="/create")
     public ResponseEntity<?> issueCertificate(@RequestBody CreateCertificateDTO dto) {
         X509Certificate certificate = certificateService.issueCertificate(dto);
-//        System.out.println("-------------------------------------------------------");
-//        System.out.println(certificate.getKeyUsage());
-//        System.out.println("-------------------------------------------------------");
-
-        if(certificate == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-//        System.out.println("-------------------------------------------------------");
-//        System.out.println(certificate);
-//        System.out.println("-------------------------------------------------------");
-
+        if(certificate == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 
-    @RequestMapping(value="/createSelfSigned", method = RequestMethod.POST)
+    @PostMapping(value="/createSelfSigned")
     public ResponseEntity<?> createSelfSigned(@RequestBody CreateSelfSignedCertificateDTO dto) {
         X509Certificate certificate = certificateService.issueSelfSignedCertificate(dto);
-//        System.out.println("-------------------------------------------------------");
-//        System.out.println(certificate.getKeyUsage());
-//        System.out.println("-------------------------------------------------------");
-        if(certificate == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-//        System.out.println("-------------------------------------------------------");
-//        System.out.println(certificate);
-//        System.out.println("-------------------------------------------------------");
+        if(certificate == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @RequestMapping(value="/findAllRootsAndCA", method = RequestMethod.GET)
+    @GetMapping(value="/findAllRootsAndCA")
     public List<MyCertificate> findAllRootsAndCA() {
         return this.certificateService.findAllRootsAndCA();
     }
 
-    @RequestMapping(value="/findUserByCertificateSerialNumber/{serialNumber}", method = RequestMethod.GET)
+    @GetMapping(value="/findUserByCertificateSerialNumber/{serialNumber}")
     public User findUserByCertificateSerialNumber(@PathVariable String serialNumber) {
         MyCertificate certificate = this.certificateService.findMyCertificateBySerialNumber(serialNumber);
         return certificate.getUser();
     }
 
-
-    @RequestMapping(value="/revokeCerificate/{serialNumber}", method = RequestMethod.GET)
+    @GetMapping(value="/revokeCerificate/{serialNumber}")
     public void revokeCerificate(@PathVariable String serialNumber){
-        System.out.println("EVO ME OVDE:" + serialNumber);
         certificateService.revokeCerificate(serialNumber);
     }
   
-    @RequestMapping(value="/findCertificateBySerialNumber/{serialNumber}", method = RequestMethod.GET)
+    @GetMapping(value="/findCertificateBySerialNumber/{serialNumber}")
     public MyCertificate findCertificateBySerialNumber(@PathVariable String serialNumber) {
         return this.certificateService.findMyCertificateBySerialNumber(serialNumber);
     }
 
-    @RequestMapping(value="/findAllRootAndCAByUser/{id}", method = RequestMethod.GET)
+    @GetMapping(value="/findAllRootAndCAByUser/{id}")
     public List<MyCertificate> findAllRootAndCAByUser(@PathVariable Integer id) {
         List<MyCertificate> certificates = new ArrayList<>();
 
@@ -135,16 +113,13 @@ public class CertificateController {
         return certificates;
     }
 
-    @RequestMapping(value="/findIssuerEmailBySerialNumber", method = RequestMethod.POST)
+    @PostMapping(value="/findIssuerEmailBySerialNumber")
     public ResponseEntity<?> findIssuerEmailBySerialNumber(@RequestBody RevokeCertificateDTO dto){
-        System.out.println("VRACAMOOO: " + certificateService.findIssuerEmailBySerialNumber(dto));
-        if(certificateService.findIssuerEmailBySerialNumber(dto) == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        if(certificateService.findIssuerEmailBySerialNumber(dto) == null){ return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         return new ResponseEntity<>(certificateService.findIssuerEmailBySerialNumber(dto), HttpStatus.OK);
     }
 
-    @RequestMapping(value="/findBySerialNumber/{serialNumber}", method = RequestMethod.GET)
+    @GetMapping(value="/findBySerialNumber/{serialNumber}")
     public AllCertificatesViewDTO findBySerialNumber(@PathVariable String serialNumber) {
         CertificateMapper certificateMapper = new CertificateMapper();
         return certificateMapper.certificateWithCommonNameToCertificateDto(this.certificateService.findMyCertificateBySerialNumber(serialNumber));

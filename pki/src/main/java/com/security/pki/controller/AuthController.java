@@ -28,7 +28,7 @@ public class AuthController {
     @Autowired
     private TokenUtils tokenUtils;
 
-    @RequestMapping(method = RequestMethod.POST, value = "/register")
+    @PostMapping(value = "/register")
     public ResponseEntity<?> registerUser(@RequestBody SignUpUserDTO dto) throws Exception {
         try {
             User user = userService.register(dto);
@@ -41,7 +41,7 @@ public class AuthController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/activateAccount")
+    @GetMapping(value = "/activateAccount")
     public ResponseEntity<?> activateAccount(@RequestParam("token")String verificationToken) {
         if(userService.verifyUserAccount(verificationToken)) {
             return new ResponseEntity<>(HttpStatus.OK);
@@ -49,7 +49,7 @@ public class AuthController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/login")
+    @PostMapping(value = "/login")
     public ResponseEntity<UserTokenStateDTO> login(@RequestBody @Valid LoginDTO loginDTO) {
         Authentication authentication;
         try {

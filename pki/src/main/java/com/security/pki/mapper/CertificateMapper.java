@@ -37,7 +37,7 @@ public class CertificateMapper {
 		CertificateDataMapper cdMapper = new CertificateDataMapper();
 		dto.setCertificateDataDTO(cdMapper.certDataToCertDTO(certificate.getCertificateData()));
 		dto.setCertificateType(certificate.getCertificateType().toString());
-		dto.setCertificateUsage(dto.getCertificateUsage());		// TODO
+		dto.setCertificateUsage(dto.getCertificateUsage());
 		return dto;
 	}
 
@@ -70,7 +70,7 @@ public class CertificateMapper {
 		cert.setValidTo(dto.getValidTo());
 		setCertificateType(dto.getCertificateType(), cert);
 		cert.setRevoked(false);
-		cert.setCertificateUsage(dto.getCertificateUsage()); // TODO: Sanja: dogovoriti se za namene sertifikata
+		cert.setCertificateUsage(dto.getCertificateUsage());
 		cert.setUser(user);
 		cert.setCertificateData(new CertificateDataMapper().CertDataDtoToCertData(dto.getCertificateDataDTO()));
 		return cert;
@@ -82,7 +82,7 @@ public class CertificateMapper {
 		cert.setValidTo(dto.getValidTo());
 		setCertificateType(dto.getCertificateType(), cert);
 		cert.setRevoked(false);
-		cert.setCertificateUsage(dto.getCertificateUsage()); // TODO: Sanja: dogovoriti se za namene sertifikata
+		cert.setCertificateUsage(dto.getCertificateUsage());
 		cert.setUser(user);
 		cert.setCertificateData(new CertificateDataMapper().CertDataDtoToCertData(dto.getCertificateDataDTO()));
 		return cert;

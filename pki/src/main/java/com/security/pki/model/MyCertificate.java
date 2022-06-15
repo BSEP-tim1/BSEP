@@ -18,8 +18,6 @@ import lombok.Setter;
 @Entity(name = "certificates")
 public class MyCertificate {
 
-	//TODO: svuda staviti u polja nullable = false
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -42,10 +40,10 @@ public class MyCertificate {
 	private CertificateType certificateType;
 
 	@Column(name = "serialNumber", nullable = false)
-	private String serialNumber;	// potrebno kod OCSP protokola za proveru povucenosti sertifikata
+	private String serialNumber;
 
 	@Column(name = "certificateUsage", nullable = false)
-	private String certificateUsage; 	// namena sertifikata
+	private String certificateUsage;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "certificateData_id", referencedColumnName = "id", nullable = false)
