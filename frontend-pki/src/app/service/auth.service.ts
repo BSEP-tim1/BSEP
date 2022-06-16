@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   private readonly activateAccountPath = /*environment.backend_api + */'http://localhost:9000/auth/activateAccount?token=';
+  private readonly activatePasswordPath = /*environment.backend_api + */'http://localhost:9000/auth/activateNewPassword?token=';
   private readonly loginPath = /*environment.backend_api + */'http://localhost:9000/auth/login';
   private readonly registerPath = /*environment.backend_api + */'http://localhost:9000/auth/register';
 
@@ -25,6 +26,16 @@ export class AuthService {
       responseType: 'text'
     })
     return this.http.get<any>(`${this.activateAccountPath}`+ jwt, {'headers': headers})
+    .pipe(map((res: any) => { }))
+    .pipe(catchError(error => this.checkActivationAccountError(error)));
+  }
+
+  activatePassword(jwt: string, pass: string): Observable<any> {
+    console.log(jwt)
+    const headers = new HttpHeaders({
+      responseType: 'text'
+    })
+    return this.http.post<any>(`${this.activatePasswordPath}`+ jwt, pass, {'headers': headers})
     .pipe(map((res: any) => { }))
     .pipe(catchError(error => this.checkActivationAccountError(error)));
   }

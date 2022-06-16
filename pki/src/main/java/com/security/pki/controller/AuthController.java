@@ -49,6 +49,22 @@ public class AuthController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @GetMapping(value = "/recoveryEmail")
+    public ResponseEntity<?> recoveryEmail(@RequestParam("email") String email) throws Exception {
+        if(userService.recoveryPass(email)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @PostMapping(value = "/activateNewPassword")
+    public ResponseEntity<?> activatePassword(@RequestParam("token")String verificationToken, @RequestBody String newPassword) throws Exception {
+        if(userService.verifyRecoveryAccount(verificationToken, newPassword)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @PostMapping(value = "/login")
     public ResponseEntity<UserTokenStateDTO> login(@RequestBody @Valid LoginDTO loginDTO) {
         Authentication authentication;

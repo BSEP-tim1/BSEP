@@ -83,6 +83,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean recoveryPass(String email) throws Exception{
+        User is = userRepository.findByEmail(email);
+        if(is == null){
+            throw new Exception("We don't have any user with that email");
+        }
+        VerificationToken verificationToken = new VerificationToken(is);
+        if (!emailService.sendAccountRecoveryMail(verificationToken.getToken(), is.getEmail())) {
+            throw new Exception("Email for account verification not sent, try again");
+        }
+        verificationTokenService.saveVerificationToken(verificationToken);
+        return true;
+    }
+
+    @Override
     public User findUserById(Integer id) {
         for(User user: userRepository.findAll()){
             if(user.getId() == id){
@@ -137,9 +151,37 @@ public class UserServiceImpl implements UserService {
         if (difference_In_Minutes <= TOKEN_EXPIRES_MINUTES) {
             user.setIsActive(true);
             userRepository.save(user);
+            verificationTokenRepository.delete(verificationToken);
             return true;
         } else {
             userRepository.delete(user);
+            verificationTokenRepository.delete(verificationToken);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean verifyRecoveryAccount(String token, String newPassword) throws Exception {
+        VerificationToken verificationToken = verificationTokenRepository.findVerificationTokenByToken(token);
+        long difference_In_Time = (new Date()).getTime() - verificationToken.getCreatedDateTime().getTime();
+        User user = userRepository.findByEmail(verificationToken.getUser().getEmail());
+        ;
+        long difference_In_Minutes = (difference_In_Time / (1000 * 60)) % 60;
+
+        if (!checkPasswordCriteria(newPassword)) {
+            String pswdError = "Password must contain minimum 8 characters, at least one uppercase " +
+                    "letter, one lowercase letter, one number and one special character and " +
+                    "must not contain white spaces";
+            System.out.println(pswdError);
+            throw new Exception(pswdError);
+        }
+
+        if (difference_In_Minutes <= TOKEN_EXPIRES_MINUTES) {
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(user);
+            verificationTokenRepository.delete(verificationToken);
+            return true;
+        } else {
             verificationTokenRepository.delete(verificationToken);
             return false;
         }

@@ -11,6 +11,8 @@ import { NewCertificateComponent } from './new-certificate/new-certificate.compo
 import { NewCertificateAdminComponent } from './new-certificate-admin/new-certificate-admin.component';
 import { AccountActivationComponent } from './account-activation/account-activation.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { PasswordRecoveryComponent } from './password-recovery/password-recovery.component';
 
 const routes: Routes = [
   {path: "", redirectTo: '/login', pathMatch: 'full'},
@@ -24,7 +26,8 @@ const routes: Routes = [
   {path: "new-certificate-admin", component: NewCertificateAdminComponent},
   {path: "activate-account/:token", component: AccountActivationComponent},
   {path: "change-password", component: ChangePasswordComponent},
-
+  {path: "recoverypass", component: ForgotPasswordComponent},
+  {path: "activate-password/:token", component: PasswordRecoveryComponent}
 ];
 
 @NgModule({

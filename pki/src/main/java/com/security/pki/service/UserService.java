@@ -22,6 +22,10 @@ public interface UserService {
 
     boolean verifyUserAccount(String verificationToken);
 
+    boolean verifyRecoveryAccount(String verificationToken, String newPassword) throws Exception;
+
+    boolean recoveryPass(String email) throws Exception;
+
     User registerAdmin(SignUpUserDTO dto) throws Exception;
 
     void changePassword(ChangePasswordDTO dto, String userEmail) throws Exception;

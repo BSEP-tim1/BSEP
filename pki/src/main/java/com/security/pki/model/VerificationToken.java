@@ -20,8 +20,8 @@ public class VerificationToken {
 
     private Date createdDate;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     private String role;
