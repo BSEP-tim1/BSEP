@@ -1,7 +1,0 @@
-
-*.jks
-pki/src/main/resources/keystores/ca.jks
-pki/src/main/resources/keystores/ca.jks
-pki/src/main/resources/keystores/ee.jks
-pki/src/main/resources/keystores/issuers.jks
-pki/src/main/resources/keystores/root.jks
