@@ -14,7 +14,9 @@ export class LoginComponent implements OnInit {
   constructor(private http: HttpClient, private router: Router, private authService: AuthService) { }
 
   ngOnInit(): void {
+    localStorage.clear();
   }
+
   email = new FormControl('', [Validators.required, Validators.email]);
   getErrorMessage() {
     if (this.email.hasError('required')) {

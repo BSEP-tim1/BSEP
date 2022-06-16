@@ -1,9 +1,7 @@
 package com.security.pki.controller;
 
 import com.security.pki.dto.ChangePasswordDTO;
-import com.security.pki.dto.LoginDTO;
 import com.security.pki.dto.SignUpUserDTO;
-import com.security.pki.dto.UserDTO;
 import com.security.pki.enums.UserType;
 import com.security.pki.mapper.UserMapper;
 import com.security.pki.model.User;
@@ -13,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -59,7 +58,7 @@ public class UserController {
     public ResponseEntity<List<User>> findAllClients() {
         List<User> users = new ArrayList<>();
         for (User u: userService.findAll()) {
-            if(u.getUserType().equals(UserType.USER)){
+            if(u.getUserType().equals(UserType.ROLE_USER)){
                 users.add(u);
             }
         }

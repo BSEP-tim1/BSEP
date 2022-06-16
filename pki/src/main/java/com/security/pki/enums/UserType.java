@@ -1,6 +1,6 @@
 package com.security.pki.enums;
 
 public enum UserType {
-	USER,
-	ADMIN
+	ROLE_USER,
+	ROLE_ADMIN
 }

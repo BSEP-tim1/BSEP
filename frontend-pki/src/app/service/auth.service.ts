@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { catchError, map, Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import jwt_decode from "jwt-decode";
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class AuthService {
   private readonly loginPath = /*environment.backend_api + */'http://localhost:9000/auth/login';
   private readonly registerPath = /*environment.backend_api + */'http://localhost:9000/auth/register';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   logged: Boolean = false;
   private access_token = null;
@@ -76,6 +77,7 @@ export class AuthService {
       }
       if(this.jwtHelper.isTokenExpired(locStorageToken)) {
         console.log("Token je istekao")
+        this.router.navigate(['login']);
       }
       return this.jwtHelper.isTokenExpired(locStorageToken);
     }
