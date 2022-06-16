@@ -11,6 +11,7 @@
     </div>
     <div class="right">
         <div fxFlex="1 1 auto" fxLayout="row" fxLayoutAlign="flex-end center"> 
+            <button *ngIf="isAdmin()" mat-button mat-ripple (click)="addAdmin()"> NEW ADMIN </button>
             <button *ngIf="isAdmin() || isClient()" mat-button mat-ripple (click)="changePassword()"> CHANGE PASSWORD </button>
 
             <button *ngIf="isAdmin()" mat-button mat-ripple routerLink="/new-certificate-admin">

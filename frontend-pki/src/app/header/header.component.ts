@@ -39,4 +39,8 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['change-password'])
   }
 
+  addAdmin() {
+    this.router.navigate(['/new-admin'])
+  }
+
 }
