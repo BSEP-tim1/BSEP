@@ -64,7 +64,7 @@ export class NewAdminComponent implements OnInit {
       'email': this.email.value,
       'password': this.password.value,
       'userType': "ROLE_ADMIN",
-      'authorityType': "ROOT" // da li je admin i root?
+      'authorityType': "ROOT"
     }
     let body = JSON.stringify(user)
     const headers = new HttpHeaders({

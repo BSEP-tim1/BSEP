@@ -11,7 +11,6 @@
               <label for="certificateType" style="width: 35%;" class="col-sm-2 col-form-label">Certificate Type:</label>
               <div class="col-sm-7">
               <select name="certificateType" id="certificateType" style="width: 100%;" [(ngModel)]="certificate.certificateType">
-              <!-- <option value="0" selected>select type</option> -->
               <option value="INTERMEDIATE">INTERMEDIATE</option>
               <option value="END_ENTITY">END_ENTITY</option>
               </select>
@@ -34,7 +33,6 @@
                   <label style="width: 100%;"> {{ certificate.subjectName }} </label>
               </div>
           </div>
-          <!-- END INFO ABOUT SUBJECT -->
 
           <div class="form-group row">
               <label for="issuer" style="width: 35%;" class="col-sm-2 col-form-label">Issued by:</label>

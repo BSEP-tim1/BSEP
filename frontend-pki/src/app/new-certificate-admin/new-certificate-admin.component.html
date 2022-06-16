@@ -11,7 +11,6 @@
                 <label for="certificateType" style="width: 35%;" class="col-sm-2 col-form-label">Certificate Type:</label>
                 <div class="col-sm-7">
                     <select name="certificateType" id="certificateType" style="width: 100%;" [(ngModel)]="certificate.certificateType" (change)="selectedCertificateType()">
-                    <!-- <option value="0" selected>select type</option> -->
                     <option value="SELF_SIGNED">SELF_SIGNED</option>
                     <option value="INTERMEDIATE">INTERMEDIATE</option>
                     <option value="END_ENTITY">END_ENTITY</option>
@@ -85,7 +84,6 @@
                 <label for="certificateUsage" style="width: 35%;" class=" col-form-label">Certificate Usage:</label>
                 <div class="col-sm-7">
                 <select name="certificateUsage" id="certificateUsage" style="width: 100%;" [(ngModel)]="certificate.certificateUsage">
-                  <!-- <option value="0" selected>select usage</option> -->
                   <option value="keyCertSign">keyCertSign</option>
                   <option value="digitalSignature">digitalSignature</option>
                   <option value="keyEncipherment">keyEncipherment</option>

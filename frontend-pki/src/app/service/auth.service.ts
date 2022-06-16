@@ -34,7 +34,6 @@ export class AuthService {
       alert('You can login')
       return;
     } 
-    // alert("Oops, something wrong. Try again.")
     throw error;
   }
 

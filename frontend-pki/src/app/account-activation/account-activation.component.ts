@@ -24,7 +24,6 @@ export class AccountActivationComponent implements OnInit {
     }, err => {
       console.log(err)
       alert("Account verification failed")
-      // alert(err);
     })
   }
 

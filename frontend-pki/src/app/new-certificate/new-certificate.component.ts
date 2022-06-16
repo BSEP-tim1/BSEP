@@ -68,16 +68,6 @@ export class NewCertificateComponent implements OnInit {
       })
   }
 
-  // selectSubject(){
-  //   this.userService.findByEmail(this.certificate.subjectName).subscribe(
-  //     (user: User) => {
-  //       this.certificate.certificateDataDTO.emailAddress = this.certificate.subjectName
-  //       this.certificate.certificateDataDTO.userId = user.id;
-  //     })
-
-  //     this.certificate.certificateDataDTO.emailAddress = this.certificate.subjectName
-  // }
-
   selectIssuer(){
     this.certificate.validTo = undefined;
     this.certificate.validFrom = undefined;
@@ -144,8 +134,6 @@ export class NewCertificateComponent implements OnInit {
   }
 
   createNewCertificate(){
-
-    // TODO: nisu pokrivene sve situacije, npr. ako je neko polje prazan string
     if(this.certificate.certificateType != undefined && this.certificate.certificateUsage != undefined &&
         this.certificate.issuerName != undefined && this.certificate.issuerSerialNumber != undefined &&
         this.certificate.subjectName != undefined && this.certificate.validFrom != undefined && 

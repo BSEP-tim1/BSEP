@@ -30,7 +30,6 @@ export class UserService {
     const headers = new HttpHeaders({
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      // 'responseType': 'text',
     });
     console.log(body)
     return this._http.post(`${this.userPath}/changePassword`, JSON.stringify(body), {'headers': headers})

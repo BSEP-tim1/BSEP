@@ -66,9 +66,6 @@ export class ChangePasswordComponent implements OnInit {
       alert('All fields are required')
       return true;
     }
-    // if(!this.isValid(this.oldPassword.value)){
-    //   return true;
-    // }
     if(!this.isValid(this.newPassword.value)) {
       return true;
     }
