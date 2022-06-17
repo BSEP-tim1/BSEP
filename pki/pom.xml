@@ -15,7 +15,7 @@
 	<description>Public Key Infrastructure</description>
 	<properties>
 		<java.version>11</java.version>
-		<sonar.organization>BSEP-tim1</sonar.organization>
+		<sonar.organization>bsep-tim1</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 	<dependencies>
