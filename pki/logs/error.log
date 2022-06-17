@@ -1,0 +1,1 @@
+{level:"ERROR", timestamp:"2022-06-17 09:14:36,235", file:"UserServiceImpl.java", line:"84", message:"Registration failed. Email user: admin. Email does not send."}

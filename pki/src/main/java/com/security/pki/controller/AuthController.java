@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import org.apache.log4j.Logger;
 
 @RestController
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -27,6 +28,8 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private TokenUtils tokenUtils;
+
+    static Logger logger = Logger.getLogger(AuthController.class.getName());
 
     @PostMapping(value = "/register")
     public ResponseEntity<?> registerUser(@RequestBody SignUpUserDTO dto) throws Exception {
@@ -73,18 +76,23 @@ public class AuthController {
                     loginDTO.getEmail(), loginDTO.getPassword()));
         } catch (Exception ex) {
             if (ex.getMessage().contains("User is disabled")) {
+                logger.error("Failed login. User: " + loginDTO.getEmail() + ", Account not activated.");
                 return new ResponseEntity("Account is not activated", HttpStatus.BAD_REQUEST);
             }
+            logger.warn("Failed login. User: " + loginDTO.getEmail() + ", Bad credentials.");
             return new ResponseEntity("Bad credentials", HttpStatus.BAD_REQUEST);
         }
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         User user = (User) authentication.getPrincipal();
         if (!user.getIsActive()) {
+            logger.error("Failed login. User: " + loginDTO.getEmail() + ", Account not activated.");
             return new ResponseEntity("User is not activated", HttpStatus.BAD_REQUEST);
         }
         String jwt = tokenUtils.generateToken(user.getUsername(), user.getUserType().getName(), user.getId());
         int expiresIn = tokenUtils.getExpiredIn();
+
+        logger.info("Successful login. User: " + loginDTO.getEmail());
 
         return ResponseEntity.ok(new UserTokenStateDTO(jwt, expiresIn));
     }

@@ -1,5 +1,6 @@
 package com.security.pki.service.impl;
 
+import com.security.pki.controller.AuthController;
 import com.security.pki.dto.ChangePasswordDTO;
 import com.security.pki.dto.LoginDTO;
 import com.security.pki.dto.SignUpUserDTO;
@@ -13,6 +14,7 @@ import com.security.pki.service.EmailService;
 import com.security.pki.service.UserService;
 import com.security.pki.service.UserTypeService;
 import com.security.pki.service.VerificationTokenService;
+import org.apache.log4j.Logger;
 import org.passay.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +31,8 @@ public class UserServiceImpl implements UserService {
 
     private final int TOKEN_EXPIRES_MINUTES = 15;
     private final int MIN_PASSWORD_LENGTH = 8;
+
+    static Logger logger = Logger.getLogger(UserServiceImpl.class.getName());
 
     @Autowired
     private UserRepository userRepository;
@@ -52,6 +56,7 @@ public class UserServiceImpl implements UserService {
     public User register(SignUpUserDTO dto) throws Exception {
         for(User user: userRepository.findAll()){
             if(user.getEmail().equals(dto.email)){
+                logger.error("Registration failed. Email user: " + user.getEmail() + ". Not unique email.");
                 throw new Exception("Email is not unique");
             }
         }
@@ -60,6 +65,7 @@ public class UserServiceImpl implements UserService {
                     "letter, one lowercase letter, one number and one special character and " +
                     "must not contain white spaces";
             System.out.println(pswdError);
+            logger.error("Registration failed. Email user: " + dto.getEmail() + ". Password does not match criteria.");
             throw new Exception(pswdError);
         }
         User newUser = new UserMapper().SignUpUserDtoToUser(dto);
@@ -67,6 +73,7 @@ public class UserServiceImpl implements UserService {
         newUser.setLastPasswordResetDate(Timestamp.from(Instant.now()));
         UserType role = userTypeService.findUserTypeByName("ROLE_USER");
         if (role == null) {
+            logger.error("Registration failed. Email user: " + dto.getEmail() + ", Role user:" + dto.getUserType() +". Role does not exist.");
             throw new Exception("Role does not exist");
         }
         newUser.setUserType(role);
@@ -74,11 +81,13 @@ public class UserServiceImpl implements UserService {
 
         VerificationToken verificationToken = new VerificationToken(newUser);
         if (!emailService.sendAccountActivationMail(verificationToken.getToken(), newUser.getEmail())) {
+            logger.error("Registration failed. Email user: " + dto.getEmail() + ". Email does not send.");
             throw new Exception("Email for account verification not sent, try again");
         }
         userRepository.save(newUser);
         User registeredUser = userRepository.findByEmail(newUser.getEmail());
         verificationTokenService.saveVerificationToken(verificationToken);
+        logger.info("Successful register. User: " + newUser.getEmail());
         return registeredUser;
     }
 
