@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
@@ -27,6 +28,7 @@ public class User implements UserDetails {
 	private Integer id;
 
 	@Column(unique = false)
+	@Email
 	private String email;
 	
 	private String password;

@@ -48,10 +48,10 @@ public class PkiApplication implements CommandLineRunner {
 		adminRole.setName("ROLE_ADMIN");
 		userTypeRepository.save(adminRole);
 
-		User admin = new User(1, "123", passwordEncoder.encode("123"), adminRole, null, true, Timestamp.from(Instant.now()));
+		User admin = new User(1, "neki@gmail.com", passwordEncoder.encode("123"), adminRole, null, true, Timestamp.from(Instant.now()));
 		userRepository.save(admin);
 
-		User user = new User(2, "qwe", passwordEncoder.encode("123"), userRole, null, true, Timestamp.from(Instant.now()));
+		User user = new User(2, "user@gmail.com", passwordEncoder.encode("123"), userRole, null, true, Timestamp.from(Instant.now()));
 		userRepository.save(user);
 
 		Calendar cal = Calendar.getInstance();
