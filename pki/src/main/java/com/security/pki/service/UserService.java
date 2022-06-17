@@ -24,6 +24,8 @@ public interface UserService {
 
     boolean verifyRecoveryAccount(String verificationToken, String newPassword) throws Exception;
 
+    boolean checkUser(String email);
+
     boolean recoveryPass(String email) throws Exception;
 
     User registerAdmin(SignUpUserDTO dto) throws Exception;

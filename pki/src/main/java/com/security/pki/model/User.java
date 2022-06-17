@@ -43,6 +43,8 @@ public class User implements UserDetails {
 
 	private Boolean isActive;
 
+	private Integer attemptLogin;
+
 	@Column(name="last_password_reset_date", nullable = false)
 	private Timestamp lastPasswordResetDate;
 

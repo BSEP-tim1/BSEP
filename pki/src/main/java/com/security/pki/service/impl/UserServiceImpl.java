@@ -127,6 +127,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean checkUser(String email){
+        User user = findByEmail(email);
+        Integer br = user.getAttemptLogin();
+        if(user != null && user.getIsActive()){
+            if(user.getAttemptLogin() <= 5){
+                br++;
+                user.setAttemptLogin(br);
+            }else {
+                user.setIsActive(false);
+                VerificationToken verificationToken = new VerificationToken(user);
+                if (!emailService.sendAccountActivationMail(verificationToken.getToken(), user.getEmail())) {
+                    logger.error("Registration failed. Email user: " + user.getEmail() + ". Email does not send.");
+                }
+                verificationTokenService.saveVerificationToken(verificationToken);
+                return false;
+            }
+            userRepository.save(user);
+        }
+
+        return true;
+    }
+
+    @Override
     public User findByEmail(String subjectName) {
         return userRepository.findByEmail(subjectName);
     }
@@ -159,6 +182,7 @@ public class UserServiceImpl implements UserService {
         long difference_In_Minutes = (difference_In_Time / (1000 * 60)) % 60;
         if (difference_In_Minutes <= TOKEN_EXPIRES_MINUTES) {
             user.setIsActive(true);
+            user.setAttemptLogin(0);
             userRepository.save(user);
             verificationTokenRepository.delete(verificationToken);
             return true;

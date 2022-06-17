@@ -51,7 +51,10 @@ export class LoginComponent implements OnInit {
         }
     },
     err => {
-      alert('Invalid email and/or password')
+      if(err.error === "Account is not activated")
+        alert('Account is not activated, please check your email')
+      else{alert('Invalid email and/or password')}
+      
     })
 
   }

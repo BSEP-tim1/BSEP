@@ -78,6 +78,9 @@ public class AuthController {
             if (ex.getMessage().contains("User is disabled")) {
                 logger.error("Failed login. User: " + loginDTO.getEmail() + ", Account not activated.");
                 return new ResponseEntity("Account is not activated", HttpStatus.BAD_REQUEST);
+            } else if(userService.checkUser(loginDTO.getEmail()) == false){
+                logger.error("Failed login. User: " + loginDTO.getEmail() + ", Account not activated.");
+                return new ResponseEntity("User is not activated", HttpStatus.BAD_REQUEST);
             }
             logger.warn("Failed login. User: " + loginDTO.getEmail() + ", Bad credentials.");
             return new ResponseEntity("Bad credentials", HttpStatus.BAD_REQUEST);
