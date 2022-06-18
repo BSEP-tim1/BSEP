@@ -50,9 +50,7 @@ public class User implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		List<UserType> ut = new ArrayList<UserType>();
-		ut.add(userType);
-		return ut;
+		return this.userType.getPermissions();
 	}
 
 	@Override

@@ -36,7 +36,7 @@ public class UserController {
         return ResponseEntity.ok(new UserMapper().UserToUserDto(user));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('addAdmin')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, value = "/addAdmin")
     public ResponseEntity<?> addAdmin(@RequestBody SignUpUserDTO dto) throws Exception {
         User user = userService.registerAdmin(dto);

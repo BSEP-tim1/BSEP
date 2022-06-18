@@ -40,6 +40,7 @@ public class CertificateController {
     }
 
     @GetMapping(value = "/downloadCertificate/{id}")
+    @PreAuthorize("hasAuthority('downloadCertificate')")
     public ResponseEntity<?> downloadCertificate(@PathVariable Integer id) throws KeyStoreException, CertificateEncodingException, IOException {
         MyCertificate cert = certificateService.findById(id);
         if(cert.isRevoked()){
@@ -65,6 +66,7 @@ public class CertificateController {
         return this.certificateService.findDtoById(id);
     }
 
+    @PreAuthorize("hasAuthority('issueCertificate')")
     @PostMapping(value="/create")
     public ResponseEntity<?> issueCertificate(@RequestBody CreateCertificateDTO dto) {
         X509Certificate certificate = certificateService.issueCertificate(dto);
@@ -72,7 +74,7 @@ public class CertificateController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('createSelfSigned')")
     @PostMapping(value="/createSelfSigned")
     public ResponseEntity<?> createSelfSigned(@RequestBody CreateSelfSignedCertificateDTO dto) {
         X509Certificate certificate = certificateService.issueSelfSignedCertificate(dto);
@@ -80,7 +82,7 @@ public class CertificateController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('findAllRootsAndCA')")
     @GetMapping(value="/findAllRootsAndCA")
     public List<MyCertificate> findAllRootsAndCA() {
         return this.certificateService.findAllRootsAndCA();
@@ -92,6 +94,7 @@ public class CertificateController {
         return certificate.getUser();
     }
 
+    @PreAuthorize("hasAuthority('revokeCerificate')")
     @GetMapping(value="/revokeCerificate/{serialNumber}")
     public void revokeCerificate(@PathVariable String serialNumber){
         certificateService.revokeCerificate(serialNumber);

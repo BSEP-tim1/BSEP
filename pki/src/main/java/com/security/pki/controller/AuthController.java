@@ -3,6 +3,7 @@ package com.security.pki.controller;
 import com.security.pki.dto.LoginDTO;
 import com.security.pki.dto.SignUpUserDTO;
 import com.security.pki.dto.UserTokenStateDTO;
+import com.security.pki.model.Permission;
 import com.security.pki.model.User;
 import com.security.pki.security.util.TokenUtils;
 import com.security.pki.service.UserService;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import org.apache.log4j.Logger;
+
+import java.util.Collection;
 
 @RestController
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -92,7 +95,8 @@ public class AuthController {
             logger.error("Failed login. User: " + loginDTO.getEmail() + ", Account not activated.");
             return new ResponseEntity("User is not activated", HttpStatus.BAD_REQUEST);
         }
-        String jwt = tokenUtils.generateToken(user.getUsername(), user.getUserType().getName(), user.getId());
+        Collection<Permission> p = user.getUserType().getPermissions();
+        String jwt = tokenUtils.generateToken(user.getUsername(), user.getUserType().getName(), user.getId(), p);
         int expiresIn = tokenUtils.getExpiredIn();
 
         logger.info("Successful login. User: " + loginDTO.getEmail());
