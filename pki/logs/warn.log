@@ -26,3 +26,8 @@
 {level:"WARN", timestamp:"2022-06-18 01:25:47,228", file:"AuthController.java", line:"85", message:"Failed login. User: neki@gmail.com, Bad credentials."}
 {level:"WARN", timestamp:"2022-06-18 01:25:48,878", file:"AuthController.java", line:"85", message:"Failed login. User: neki@gmail.com, Bad credentials."}
 {level:"WARN", timestamp:"2022-06-18 01:25:50,588", file:"AuthController.java", line:"85", message:"Failed login. User: neki@gmail.com, Bad credentials."}
+{level:"WARN", timestamp:"2022-06-18 01:38:27,256", file:"AuthController.java", line:"85", message:"Failed login. User: jovanprcko@gmail.com, Bad credentials."}
+{level:"WARN", timestamp:"2022-06-18 01:38:30,017", file:"AuthController.java", line:"85", message:"Failed login. User: jovanprcko@gmail.com, Bad credentials."}
+{level:"WARN", timestamp:"2022-06-18 01:38:31,679", file:"AuthController.java", line:"85", message:"Failed login. User: jovanprcko@gmail.com, Bad credentials."}
+{level:"WARN", timestamp:"2022-06-18 01:38:33,486", file:"AuthController.java", line:"85", message:"Failed login. User: jovanprcko@gmail.com, Bad credentials."}
+{level:"WARN", timestamp:"2022-06-18 01:38:35,155", file:"AuthController.java", line:"85", message:"Failed login. User: jovanprcko@gmail.com, Bad credentials."}

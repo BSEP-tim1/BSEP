@@ -71,6 +71,13 @@ export class AuthService {
     }));
   }
 
+  isAuthenticated(): boolean {
+    if (this.tokenIsPresent() && this.roleIsPresent() && !this.tokenIsExpired()){
+      return true;
+    }
+    return false;
+  }
+
   tokenIsPresent() {
     return localStorage.getItem("jwt") != undefined && localStorage.getItem("jwt") != null;
   }

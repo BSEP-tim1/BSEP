@@ -11,8 +11,9 @@ import { FormsModule, ReactiveFormsModule, NgForm} from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table'
-
-
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { AuthGuardService } from './service/auth-guard.service';
+import { RoleGuardService } from './service/role-guard.service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -75,6 +76,9 @@ import { PasswordRecoveryComponent } from './password-recovery/password-recovery
       useClass: TokenInterceptor,
       multi: true
       }, 
+      AuthGuardService,
+      JwtHelperService,
+      RoleGuardService, 
   ],
   bootstrap: [AppComponent]
 })

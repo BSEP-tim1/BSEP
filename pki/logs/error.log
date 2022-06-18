@@ -8,3 +8,6 @@
 {level:"ERROR", timestamp:"2022-06-18 01:34:09,736", file:"AuthController.java", line:"79", message:"Failed login. User: neki@gmail.com, Account not activated."}
 {level:"ERROR", timestamp:"2022-06-18 01:35:00,572", file:"AuthController.java", line:"79", message:"Failed login. User: neki@gmail.com, Account not activated."}
 {level:"ERROR", timestamp:"2022-06-18 01:35:48,754", file:"AuthController.java", line:"79", message:"Failed login. User: neki@gmail.com, Account not activated."}
+{level:"ERROR", timestamp:"2022-06-18 01:38:38,378", file:"AuthController.java", line:"82", message:"Failed login. User: jovanprcko@gmail.com, Account not activated."}
+{level:"ERROR", timestamp:"2022-06-18 01:38:47,728", file:"AuthController.java", line:"79", message:"Failed login. User: jovanprcko@gmail.com, Account not activated."}
+{level:"ERROR", timestamp:"2022-06-18 01:38:58,090", file:"AuthController.java", line:"79", message:"Failed login. User: jovanprcko@gmail.com, Account not activated."}

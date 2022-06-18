@@ -1,1 +1,5 @@
 {level:"INFO", timestamp:"2022-06-18 01:13:43,372", file:"UserServiceImpl.java", line:"90", message:"Successful register. User: jovanprcko@gmail.com"}
+{level:"INFO", timestamp:"2022-06-18 01:38:01,492", file:"UserServiceImpl.java", line:"90", message:"Successful register. User: jovanprcko@gmail.com"}
+{level:"INFO", timestamp:"2022-06-18 01:38:16,909", file:"AuthController.java", line:"98", message:"Successful login. User: jovanprcko@gmail.com"}
+{level:"INFO", timestamp:"2022-06-18 01:39:16,820", file:"AuthController.java", line:"98", message:"Successful login. User: jovanprcko@gmail.com"}
+{level:"INFO", timestamp:"2022-06-18 02:27:31,026", file:"AuthController.java", line:"98", message:"Successful login. User: user@gmail.com"}

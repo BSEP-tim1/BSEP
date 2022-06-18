@@ -13,17 +13,18 @@ import { AccountActivationComponent } from './account-activation/account-activat
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { PasswordRecoveryComponent } from './password-recovery/password-recovery.component';
+import { RoleGuardService } from './service/role-guard.service';
 
 const routes: Routes = [
   {path: "", redirectTo: '/login', pathMatch: 'full'},
   {path: "login", component: LoginComponent},
   {path: "registration", component: RegistrationComponent},
-  {path: "admin-home", component: AdminHomeComponent},
-  {path: "user-home", component: UserHomeComponent},
+  {path: "admin-home", component: AdminHomeComponent, canActivate: [RoleGuardService], data: {expectedRole: ['ROLE_ADMIN']}},
+  {path: "user-home", component: UserHomeComponent, canActivate: [RoleGuardService], data: {expectedRole: ['ROLE_USER']}},
   {path: "certificate-review/:id", component: CertificateComponent},
-  {path: "new-admin", component: NewAdminComponent},
+  {path: "new-admin", component: NewAdminComponent, canActivate: [RoleGuardService], data: {expectedRole: ['ROLE_ADMIN']}},
   {path: "new-certificate", component: NewCertificateComponent},
-  {path: "new-certificate-admin", component: NewCertificateAdminComponent},
+  {path: "new-certificate-admin", component: NewCertificateAdminComponent, canActivate: [RoleGuardService], data: {expectedRole: ['ROLE_ADMIN']}},
   {path: "activate-account/:token", component: AccountActivationComponent},
   {path: "change-password", component: ChangePasswordComponent},
   {path: "recoverypass", component: ForgotPasswordComponent},
