@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
         User user = findByEmail(email);
         Integer br = user.getAttemptLogin();
         if(user != null && user.getIsActive()){
-            if(user.getAttemptLogin() < 5){
+            if(user.getAttemptLogin() < 4){
                 br++;
                 user.setAttemptLogin(br);
             }else {
