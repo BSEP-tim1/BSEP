@@ -6,7 +6,6 @@ import com.security.pki.mapper.CertificateMapper;
 import com.security.pki.model.*;
 import com.security.pki.repository.CertificateChainRepository;
 import com.security.pki.repository.CertificateRepository;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
@@ -18,10 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.FileSystems;
 import java.nio.file.Paths;
 import java.security.*;
@@ -56,7 +51,7 @@ public class CertificateService {
     private KeyStoreWriterService ksw = new KeyStoreWriterService();
     private KeyStoreReaderService ksr = new KeyStoreReaderService();
     private CertificateMapper certificateMapper = new CertificateMapper();
-    private String password = "pass";
+    private String pas = "pass";
 
     public List<AllCertificatesViewDTO> findAll() {
         List<AllCertificatesViewDTO> dtos = new ArrayList<>();
@@ -214,7 +209,7 @@ public class CertificateService {
             filename = "ca.jks";
         }
 
-        java.security.cert.Certificate certificateIssuer = ksr.readCertificate(getPath(filename), password, new BigInteger(dto.getIssuerSerialNumber(), 16).toString());
+        java.security.cert.Certificate certificateIssuer = ksr.readCertificate(getPath(filename), pas, new BigInteger(dto.getIssuerSerialNumber(), 16).toString());
         PrivateKey privateKeyIssuer = findPrivateKeyFromKeyStore(getPath(filename), new BigInteger(dto.getIssuerSerialNumber(), 16).toString());
 
         X500Name issuer = new X500NameBuilder().addRDN(BCStyle.E, dto.getIssuerName()).build();
@@ -344,33 +339,33 @@ public class CertificateService {
     private void writeCertificate(String certificateType, X509Certificate x509Certificate, PrivateKey privateKey) {
 
         if (certificateType.equals(CertificateType.END_ENTITY.toString())) {
-            ksw.loadKeyStore(getPath("ee.jks"), password.toCharArray());
-            ksw.write(x509Certificate.getSerialNumber().toString(), privateKey, password.toCharArray(), x509Certificate);
-            ksw.saveKeyStore(getPath("ee.jks"), password.toCharArray());
+            ksw.loadKeyStore(getPath("ee.jks"), pas.toCharArray());
+            ksw.write(x509Certificate.getSerialNumber().toString(), privateKey, pas.toCharArray(), x509Certificate);
+            ksw.saveKeyStore(getPath("ee.jks"), pas.toCharArray());
             readCertificate(x509Certificate, "ee.jks");
         } else if (certificateType.equals(CertificateType.INTERMEDIATE.toString())) {
-            ksw.loadKeyStore(getPath("ca.jks"), password.toCharArray());
-            ksw.write(x509Certificate.getSerialNumber().toString(), privateKey, password.toCharArray(), x509Certificate);
-            ksw.saveKeyStore(getPath("ca.jks"), password.toCharArray());
+            ksw.loadKeyStore(getPath("ca.jks"), pas.toCharArray());
+            ksw.write(x509Certificate.getSerialNumber().toString(), privateKey, pas.toCharArray(), x509Certificate);
+            ksw.saveKeyStore(getPath("ca.jks"), pas.toCharArray());
             readCertificate(x509Certificate, "ca.jks");
         } else if (certificateType.equals(CertificateType.SELF_SIGNED.toString())) {
-            ksw.loadKeyStore(getPath("root.jks"), password.toCharArray());
-            ksw.write(x509Certificate.getSerialNumber().toString(), privateKey, password.toCharArray(), x509Certificate);
-            ksw.saveKeyStore(getPath("root.jks"), password.toCharArray());
+            ksw.loadKeyStore(getPath("root.jks"), pas.toCharArray());
+            ksw.write(x509Certificate.getSerialNumber().toString(), privateKey, pas.toCharArray(), x509Certificate);
+            ksw.saveKeyStore(getPath("root.jks"), pas.toCharArray());
             readCertificate(x509Certificate, "root.jks");
         }
     }
 
     private void saveIssuerPrivateKey(X509Certificate x509Certificate, PrivateKey privateKeyIssuer) {
-        ksw.loadKeyStore(getPath("issuers.jks"), password.toCharArray());
-        ksw.write(x509Certificate.getSerialNumber().toString(), privateKeyIssuer, password.toCharArray(), x509Certificate);
-        ksw.saveKeyStore(getPath("issuers.jks"), password.toCharArray());
+        ksw.loadKeyStore(getPath("issuers.jks"), pas.toCharArray());
+        ksw.write(x509Certificate.getSerialNumber().toString(), privateKeyIssuer, pas.toCharArray(), x509Certificate);
+        ksw.saveKeyStore(getPath("issuers.jks"), pas.toCharArray());
 
         readCertificate(x509Certificate, "issuers.jks");
     }
 
     private void readCertificate(X509Certificate x509Certificate, String path) {
-        java.security.cert.Certificate c = ksr.readCertificate(getPath(path), password, x509Certificate.getSerialNumber().toString());
+        java.security.cert.Certificate c = ksr.readCertificate(getPath(path), pas, x509Certificate.getSerialNumber().toString());
         System.out.println("------------------------UCITAN------------------------");
         System.out.println(c);
         System.out.println("------------------------KRAJ------------------------");
@@ -421,8 +416,8 @@ public class CertificateService {
     }
 
     private PrivateKey findPrivateKeyFromKeyStore(String fileName, String serialNumber) {
-        ksw.loadKeyStore(fileName, password.toCharArray());
-        PrivateKey pk = ksr.readPrivateKey(fileName, password, serialNumber, password);
+        ksw.loadKeyStore(fileName, pas.toCharArray());
+        PrivateKey pk = ksr.readPrivateKey(fileName, pas, serialNumber, pas);
         return pk;
     }
 
@@ -433,11 +428,11 @@ public class CertificateService {
     public Certificate findCertificateBySerialNumber(String serialNumber, String certType) throws KeyStoreException {
         KeyStore keyStore = null;
         if (certType.equals(CertificateType.END_ENTITY.toString())) {
-            keyStore = ksw.getKeyStore(getPath("ee.jks"), password.toCharArray());
+            keyStore = ksw.getKeyStore(getPath("ee.jks"), pas.toCharArray());
         } else if (certType.equals(CertificateType.INTERMEDIATE.toString())) {
-            keyStore = ksw.getKeyStore(getPath("ca.jks"), password.toCharArray());
+            keyStore = ksw.getKeyStore(getPath("ca.jks"), pas.toCharArray());
         } else if (certType.equals(CertificateType.SELF_SIGNED.toString())) {
-            keyStore = ksw.getKeyStore(getPath("root.jks"), password.toCharArray());
+            keyStore = ksw.getKeyStore(getPath("root.jks"), pas.toCharArray());
         }
         Certificate certificate = keyStore.getCertificate(new BigInteger(serialNumber, 16).toString());
         System.out.println(certificate.toString());
@@ -475,15 +470,15 @@ public class CertificateService {
 
     public String findIssuerEmailBySerialNumber(RevokeCertificateDTO dto){
         if(dto.getCertType().equals(CertificateType.SELF_SIGNED.toString())){
-            List<X509Certificate> roots= ksr.getCertificatesInKeyStore(getPath("root.jks"), password);
+            List<X509Certificate> roots= ksr.getCertificatesInKeyStore(getPath("root.jks"), pas);
             findIssuerEmail(roots, dto);
         }
         else   if(dto.getCertType().equals(CertificateType.INTERMEDIATE.toString())){
-            List<X509Certificate> roots= ksr.getCertificatesInKeyStore(getPath("ca.jks"), password);
+            List<X509Certificate> roots= ksr.getCertificatesInKeyStore(getPath("ca.jks"), pas);
             findIssuerEmail(roots, dto);
         }
         else   if(dto.getCertType().equals(CertificateType.END_ENTITY.toString())){
-            List<X509Certificate> roots= ksr.getCertificatesInKeyStore(getPath("ee.jks"), password);
+            List<X509Certificate> roots= ksr.getCertificatesInKeyStore(getPath("ee.jks"), pas);
             findIssuerEmail(roots, dto);
         }
         return null;
