@@ -5,6 +5,7 @@ import com.security.pki.mapper.CertificateMapper;
 import com.security.pki.model.MyCertificate;
 import com.security.pki.model.User;
 import com.security.pki.service.CertificateService;
+import org.apache.log4j.Logger;
 import org.bouncycastle.util.encoders.Base64Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -29,6 +30,8 @@ public class CertificateController {
     @Autowired
     private CertificateService certificateService;
 
+    static Logger logger = Logger.getLogger(CertificateController.class.getName());
+
     @GetMapping(value="")
     public List<AllCertificatesViewDTO> getAll() {
         return this.certificateService.findAll();
@@ -44,6 +47,7 @@ public class CertificateController {
     public ResponseEntity<?> downloadCertificate(@PathVariable Integer id) throws KeyStoreException, CertificateEncodingException, IOException {
         MyCertificate cert = certificateService.findById(id);
         if(cert.isRevoked()){
+            logger.warn("Failed downloading. Certificate: "+ cert.getSerialNumber()+" is revoked");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Certificate certificate = certificateService.findCertificateBySerialNumber(cert.getSerialNumber(), cert.getCertificateType().toString());
@@ -57,6 +61,7 @@ public class CertificateController {
                     .contentType(MediaType.parseMediaType("application/octet-stream"))
                     .body(resource);
         } catch (CertificateEncodingException e) {
+            logger.warn("Failed downloading. Certificate: "+ cert.getSerialNumber());
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -71,6 +76,7 @@ public class CertificateController {
     public ResponseEntity<?> issueCertificate(@RequestBody CreateCertificateDTO dto) {
         X509Certificate certificate = certificateService.issueCertificate(dto);
         if(certificate == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        logger.info("Successful created certificate.");
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -78,7 +84,8 @@ public class CertificateController {
     @PostMapping(value="/createSelfSigned")
     public ResponseEntity<?> createSelfSigned(@RequestBody CreateSelfSignedCertificateDTO dto) {
         X509Certificate certificate = certificateService.issueSelfSignedCertificate(dto);
-        if(certificate == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        if(certificate == null) {logger.error("Root certificate not created."); return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        logger.info("Successful created certificate.");
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

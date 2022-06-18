@@ -58,14 +58,17 @@ public class AuthController {
     @GetMapping(value = "/recoveryEmail")
     public ResponseEntity<?> recoveryEmail(@RequestParam("email") String email) throws Exception {
         if(userService.recoveryPass(email)) {
+            logger.info("Successful send recovery email. Email: "+ email);
             return new ResponseEntity<>(HttpStatus.OK);
         }
+        logger.error("Recovery mail not send. Email: "+email);
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @PostMapping(value = "/activateNewPassword")
     public ResponseEntity<?> activatePassword(@RequestParam("token")String verificationToken, @RequestBody String newPassword) throws Exception {
         if(userService.verifyRecoveryAccount(verificationToken, newPassword)) {
+            logger.info("Successful sent activation email.");
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
